@@ -11,18 +11,19 @@
     "MID": 10000000,
     "ATT": 12000000
   },
-  "formation": {
-    "type": "1-2-2",
+"formation": {
+    "type": "1-2-2-2",
     "positions": {
       "GK": { "row": 1, "col": 2 },
       "DEF1": { "row": 2, "col": 1 },
       "DEF2": { "row": 2, "col": 3 },
       "MID1": { "row": 3, "col": 1 },
       "MID2": { "row": 3, "col": 3 },
-      "ATT": { "row": 4, "col": 2 }
+      "ATT1": { "row": 4, "col": 1 },
+      "ATT2": { "row": 4, "col": 3 }
     }
   },
-  "playersPerTeam": 6,
+  "playersPerTeam": 7,
   "categories": ["GK", "DEF", "MID", "ATT"],
   "categoryNames": {
     "GK": "Goalkeeper",

@@ -286,13 +286,14 @@ body {
 }
 
 /* ============================================
-   PLAYER CARD - FIFA STYLE
+   PLAYER CARD - ULTRA PREMIUM UPGRADE
    ============================================ */
 
 .player-card-container {
   perspective: 1000px;
-  width: 350px;
-  height: 500px;
+  width: 440px;
+  height: 650px;
+  margin: 0 auto;
 }
 
 .player-card {
@@ -313,136 +314,175 @@ body {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: var(--border-radius-lg);
+  border-radius: 24px;
   overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border: 4px solid #f2c462;
 }
 
 .player-card-front {
-  background: var(--card-default);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .player-card-front::before {
-  content: '?';
-  font-family: var(--font-display);
-  font-size: 12rem;
-  color: rgba(255, 255, 255, 0.2);
+  content: '⚽';
+  font-size: 8rem;
+  opacity: 0.5;
+  animation: pulse 2s infinite;
 }
 
+/* === CARD BACK (The Main View) === */
 .player-card-back {
   transform: rotateY(180deg);
-  background: linear-gradient(135deg, #1a1a2e 0%, #37003c 50%, #1a1a2e 100%);
-  padding: var(--spacing-md);
+  background: linear-gradient(180deg, #dbb055 0%, #5e4a18 100%);
   display: flex;
   flex-direction: column;
+  padding: 15px;
+  color: #1a1a2e;
 }
 
-/* Card Header */
+/* Category Colors */
+.player-card-back.cat-ATT { background: linear-gradient(180deg, #ff6b6b 0%, #8a1c1c 100%); color: white; }
+.player-card-back.cat-MID { background: linear-gradient(180deg, #00ff85 0%, #006633 100%); color: #1a1a2e; }
+.player-card-back.cat-DEF { background: linear-gradient(180deg, #04f5ff 0%, #005f73 100%); color: #1a1a2e; }
+.player-card-back.cat-GK { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #1a1a2e; }
+
+/* 1. Header Section */
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-sm);
+  height: 50px;
 }
 
-.card-rating {
-  text-align: center;
+.card-rating-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 0.9;
 }
 
 .card-overall {
   font-family: var(--font-display);
   font-size: 3.5rem;
-  line-height: 1;
-  color: var(--accent-color);
+  font-weight: 900;
 }
 
 .card-position {
   font-family: var(--font-display);
   font-size: 1.5rem;
-  color: var(--text-primary);
+  opacity: 0.9;
 }
 
-.card-trait {
-  background: var(--accent-secondary);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--border-radius-sm);
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
+.card-logo {
+  font-size: 2rem;
+  opacity: 0.8;
 }
 
-/* Card Photo */
+/* 2. Photo Section */
 .card-photo-container {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 5px 0;
   position: relative;
-  margin: var(--spacing-sm) 0;
+  z-index: 10;
 }
 
 .card-photo {
-  width: 200px;
-  height: 200px;
+  width: 260px;
+  height: 260px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--accent-color);
-  box-shadow: var(--shadow-glow);
+  border: 5px solid rgba(255,255,255,0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  background: #fff;
 }
 
 .card-photo-placeholder {
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  background: var(--bg-tertiary);
+  background: rgba(255,255,255,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 4px solid var(--accent-color);
-  font-size: 4rem;
-  color: var(--text-muted);
+  font-size: 6rem;
+  font-weight: bold;
 }
 
-/* Card Name */
+/* 3. Info Section */
+.card-info-section {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .card-name {
   font-family: var(--font-display);
-  font-size: 2rem;
-  text-align: center;
-  letter-spacing: 2px;
-  margin-bottom: var(--spacing-sm);
-  background: linear-gradient(90deg, var(--text-primary), var(--accent-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 2.8rem;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 2px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  word-wrap: break-word;
 }
 
-/* Card Attributes */
+.card-trait {
+  display: inline-block;
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* 4. Stats Grid */
 .card-attributes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm);
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--border-radius);
+  gap: 8px;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
 }
 
 .card-attribute {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
 }
 
-.attr-value {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  color: var(--accent-color);
+.attr-val {
+  font-weight: 900;
+  font-size: 1.3rem;
 }
 
-.attr-label {
+.attr-lbl {
   font-size: 0.7rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+/* 5. Fun Fact */
+.card-fun-fact {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.3;
+  border-left: 3px solid rgba(255,255,255,0.5);
 }
 
 /* ============================================
@@ -497,7 +537,7 @@ body {
 
 .auction-view {
   display: grid;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: 500px 1fr;
   gap: var(--spacing-xl);
   padding: var(--spacing-xl);
   background: var(--bg-primary);
@@ -1148,11 +1188,13 @@ body {
 
 /* Player Selection */
 .player-select-list {
-  max-height: 400px;
+  max-height: 70vh; /* Takes up 70% of the screen height */
+  min-height: 600px; /* Ensures it's always at least this tall */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+  padding-right: 10px; /* Adds space for the scrollbar */
 }
 
 .player-select-item {
@@ -1631,3 +1673,65 @@ body {
 .mt-sm { margin-top: var(--spacing-sm); }
 .mt-md { margin-top: var(--spacing-md); }
 .mt-lg { margin-top: var(--spacing-lg); }
+
+/* === BIDDING POP-UP ANIMATION === */
+.bid-animation-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  pointer-events: none; /* Let clicks pass through */
+}
+
+.bid-bubble {
+  background: rgba(0, 0, 0, 0.9);
+  border: 4px solid var(--accent-color);
+  border-radius: 30px;
+  padding: 30px 60px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  box-shadow: 0 0 50px var(--accent-color);
+  transform: scale(0);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bid-animation-overlay.active .bid-bubble {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.bid-anim-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+}
+
+.bid-anim-content {
+  text-align: left;
+}
+
+.bid-anim-label {
+  font-size: 1.2rem;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.bid-anim-amount {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: var(--accent-color);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(0, 255, 133, 0.5);
+}
+
+.bid-anim-name {
+  font-size: 1.5rem;
+  color: #ccc;
+}

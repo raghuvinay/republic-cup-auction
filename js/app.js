@@ -241,10 +241,10 @@ class AuctionPresentation {
     });
 
     // Listen for bid updates
+// Listen for bid updates
     auctionSync.on(SYNC_MESSAGES.UPDATE_BID, (data) => {
-      this.updateBid(data.amount, data.history);
+      this.updateBid(data.amount, data.history, data.managerId); // <--- We added managerId here
     });
-
     // Listen for sold
     auctionSync.on(SYNC_MESSAGES.PLAYER_SOLD, (data) => {
       this.markSold(data.managerId, data.price);
@@ -438,12 +438,45 @@ class AuctionPresentation {
     this.auctionPhase = 'bidding';
   }
 
-  updateBid(amount, history = []) {
+updateBid(amount, history = [], managerId = null) {
     this.currentBid = amount;
     if (history.length > 0) {
       this.bidHistory = history;
     }
     this.updateBidDisplay();
+
+    // TRIGGER ANIMATION
+    if (managerId) {
+        this.triggerBidAnimation(managerId, amount);
+    }
+  }
+
+  triggerBidAnimation(managerId, amount) {
+      const manager = this.managers.find(m => m.id === managerId);
+      if (!manager) return;
+
+      const overlay = document.getElementById('bidAnimation');
+      const photo = document.getElementById('bidAnimPhoto');
+      const amountEl = document.getElementById('bidAnimAmount');
+      const nameEl = document.getElementById('bidAnimName');
+
+      // Set Content
+      photo.src = manager.photo || `assets/teams/team${manager.id}.png`;
+      amountEl.textContent = this.formatCurrency(amount);
+      nameEl.textContent = manager.name;
+      
+      // Play Animation
+      overlay.classList.remove('hidden');
+      // Force reflow
+      void overlay.offsetWidth; 
+      overlay.classList.add('active');
+
+      // Hide after 1.5 seconds
+      if (this.bidAnimTimeout) clearTimeout(this.bidAnimTimeout);
+      this.bidAnimTimeout = setTimeout(() => {
+          overlay.classList.remove('active');
+          setTimeout(() => overlay.classList.add('hidden'), 300);
+      }, 1500);
   }
 
   updateBidDisplay() {
@@ -535,77 +568,74 @@ class AuctionPresentation {
 
   updatePlayerCard(player, prefix = 'reveal') {
     const isAuction = prefix === 'auction';
-    const els = isAuction ? {
-      overall: this.elements.auctionCardOverall,
-      position: this.elements.auctionCardPosition,
-      trait: this.elements.auctionCardTrait,
-      photo: this.elements.auctionCardPhoto,
-      photoPlaceholder: this.elements.auctionCardPhotoPlaceholder,
-      name: this.elements.auctionCardName,
-      pace: this.elements.auctionAttrPace,
-      shooting: this.elements.auctionAttrShooting,
-      passing: this.elements.auctionAttrPassing,
-      dribbling: this.elements.auctionAttrDribbling,
-      defense: this.elements.auctionAttrDefense,
-      physical: this.elements.auctionAttrPhysical
-    } : {
-      overall: this.elements.cardOverall,
-      position: this.elements.cardPosition,
-      trait: this.elements.cardTrait,
-      photo: this.elements.cardPhoto,
-      photoPlaceholder: this.elements.cardPhotoPlaceholder,
-      name: this.elements.cardName,
-      pace: this.elements.attrPace,
-      shooting: this.elements.attrShooting,
-      passing: this.elements.attrPassing,
-      dribbling: this.elements.attrDribbling,
-      defense: this.elements.attrDefense,
-      physical: this.elements.attrPhysical
+    const idPrefix = isAuction ? 'auctionCard' : 'card';
+    const attrPrefix = isAuction ? 'auctionAttr' : 'attr';
+
+    const els = {
+      overall: document.getElementById(`${idPrefix}Overall`),
+      position: document.getElementById(`${idPrefix}Position`),
+      trait: document.getElementById(`${idPrefix}Trait`),
+      photo: document.getElementById(`${idPrefix}Photo`),
+      photoPlaceholder: document.getElementById(`${idPrefix}PhotoPlaceholder`),
+      name: document.getElementById(`${idPrefix}Name`),
+      funFact: document.getElementById(isAuction ? 'auctionCardFunFact' : 'cardFunFact'),
+      pace: document.getElementById(`${attrPrefix}Pace`),
+      shooting: document.getElementById(`${attrPrefix}Shooting`),
+      passing: document.getElementById(`${attrPrefix}Passing`),
+      dribbling: document.getElementById(`${attrPrefix}Dribbling`),
+      defense: document.getElementById(`${attrPrefix}Defense`),
+      physical: document.getElementById(`${attrPrefix}Physical`)
     };
 
-    // Calculate overall rating (average of all attributes)
+    // Calculate Rating
     const attrs = player.attributes;
-    const overall = Math.round(
-      (attrs.pace + attrs.shooting + attrs.passing + attrs.dribbling + attrs.defense + attrs.physical) / 6
-    );
+    const overall = Math.round((attrs.pace + attrs.shooting + attrs.passing + attrs.dribbling + attrs.defense + attrs.physical) / 6);
 
-    els.overall.textContent = overall;
-    els.position.textContent = player.category;
-    els.trait.textContent = player.oneWordTrait;
-    els.name.textContent = player.name;
+    // Update Text
+    if (els.overall) els.overall.textContent = overall;
+    if (els.position) els.position.textContent = player.category;
+    if (els.trait) els.trait.textContent = player.oneWordTrait || "Star";
+    if (els.name) els.name.textContent = player.name;
+    if (els.funFact) els.funFact.textContent = player.funFact || "Ready to play!";
 
-    // Attributes
-    els.pace.textContent = attrs.pace;
-    els.shooting.textContent = attrs.shooting;
-    els.passing.textContent = attrs.passing;
-    els.dribbling.textContent = attrs.dribbling;
-    els.defense.textContent = attrs.defense;
-    els.physical.textContent = attrs.physical;
+    // Update Stats
+    if (els.pace) els.pace.textContent = attrs.pace;
+    if (els.shooting) els.shooting.textContent = attrs.shooting;
+    if (els.passing) els.passing.textContent = attrs.passing;
+    if (els.dribbling) els.dribbling.textContent = attrs.dribbling;
+    if (els.defense) els.defense.textContent = attrs.defense;
+    if (els.physical) els.physical.textContent = attrs.physical;
 
-    // Photo
-    if (player.photo) {
+    // Update Photo
+    if (player.photo && els.photo) {
       els.photo.src = player.photo;
       els.photo.classList.remove('hidden');
-      els.photoPlaceholder.classList.add('hidden');
-
-      // Handle photo load error
+      if (els.photoPlaceholder) els.photoPlaceholder.classList.add('hidden');
+      
       els.photo.onerror = () => {
         els.photo.classList.add('hidden');
-        els.photoPlaceholder.classList.remove('hidden');
-        els.photoPlaceholder.textContent = player.name.charAt(0);
+        if (els.photoPlaceholder) {
+            els.photoPlaceholder.classList.remove('hidden');
+            els.photoPlaceholder.textContent = player.name.charAt(0);
+        }
       };
-    } else {
-      els.photo.classList.add('hidden');
-      els.photoPlaceholder.classList.remove('hidden');
-      els.photoPlaceholder.textContent = player.name.charAt(0);
     }
 
-    // Update base price (reveal view only)
-    if (!isAuction) {
+    // Update Base Price (Only for Reveal View)
+    if (!isAuction && this.elements.revealBasePrice) {
       this.elements.revealBasePrice.textContent = this.formatCurrency(player.basePrice);
     }
+    
+    // Dynamic Card Color
+    const cardBack = isAuction ? 
+        document.querySelector('#auctionPlayerCard .player-card-back') : 
+        document.querySelector('#playerCard .player-card-back');
+        
+    if(cardBack) {
+        cardBack.classList.remove('cat-ATT', 'cat-MID', 'cat-DEF', 'cat-GK');
+        cardBack.classList.add(`cat-${player.category}`);
+    }
   }
-
   // ===============================
   // DASHBOARD VIEWS
   // ===============================
@@ -654,64 +684,100 @@ class AuctionPresentation {
     }).join('');
   }
 
-  generateTeamViews() {
+generateTeamViews() {
     this.managers.forEach((manager, index) => {
       const viewEl = this.views[`team${index + 1}`];
       if (!viewEl) return;
 
       const managerPlayers = this.players.filter(p => p.soldTo === manager.id);
 
+      // Force Layout
+      viewEl.style.display = 'flex';
+      viewEl.style.flexDirection = 'row';
+      viewEl.style.gap = '30px';
+      viewEl.style.height = '100%';
+      viewEl.style.padding = '30px';
+      viewEl.style.boxSizing = 'border-box';
+
       viewEl.innerHTML = `
-        <div class="team-header">
-          <div class="team-info">
-            ${manager.logo ?
-              `<img src="${manager.logo}" class="team-logo" alt="${manager.teamName}" onerror="this.style.display='none'">` :
-              `<div class="team-logo-placeholder" style="background: ${manager.primaryColor}">${manager.teamName.charAt(0)}</div>`
-            }
-            <div>
-              <div class="team-name" style="color: ${manager.primaryColor}">${manager.teamName}</div>
-              <div class="team-manager">${manager.name}</div>
+          <div style="flex: 0 0 350px; background: var(--bg-secondary); padding: 25px; border-radius: 16px; border-left: 6px solid ${manager.primaryColor}; display: flex; flex-direction: column; gap: 20px; box-shadow: var(--shadow-lg); height: 100%; overflow-y: auto;">
+             
+             <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="${manager.photo}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid ${manager.secondaryColor}; flex-shrink: 0;" onerror="this.src='${manager.logo}'">
+                <div>
+                   <div style="font-family: var(--font-display); font-size: 2.2rem; line-height: 1; color: ${manager.primaryColor}; word-break: break-word;">${manager.teamName}</div>
+                   <div style="font-size: 1.2rem; color: #fff; opacity: 0.9;">${manager.name}</div>
+                </div>
+             </div>
+             
+             <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 5px;">Philosophy</div>
+                <div style="font-style: italic; color: var(--accent-color); font-size: 1.1rem;">"${manager.philosophy || 'No philosophy'}"</div>
+             </div>
+
+             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 8px; text-align: center;">
+                   <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary);">Mentality</div>
+                   <div style="font-weight: bold; font-size: 1rem;">${manager.mentality || '-'}</div>
+                </div>
+                <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 8px; text-align: center;">
+                   <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary);">Net Worth</div>
+                   <div style="font-weight: bold; font-size: 1rem; color: ${manager.secondaryColor};">${manager.netWorth || '-'}</div>
+                </div>
+             </div>
+
+             <div>
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 5px;">Track Record</div>
+                <div style="font-size: 0.9rem; color: #fff;">${manager.trackRecord || 'Unknown'}</div>
+             </div>
+          </div>
+
+          <div class="formation-container" style="flex: 1; display: flex; justify-content: center; align-items: center; position: relative; background: transparent; height: 100%;">
+            <div class="formation-pitch" style="width: 100%; height: 100%; max-width: none; aspect-ratio: auto; position: relative; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #2d8a4e 0%, #1e6b3a 100%); box-shadow: var(--shadow-lg);">
+              
+              <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; opacity: 0.6;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border: 3px solid rgba(255,255,255,0.4); border-radius: 50%;"></div>
+                <div style="position: absolute; top: 0; left: 50%; width: 3px; height: 100%; background: rgba(255,255,255,0.4);"></div>
+                <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 250px; height: 80px; border: 3px solid rgba(255,255,255,0.4); border-top: none;"></div>
+                <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 250px; height: 80px; border: 3px solid rgba(255,255,255,0.4); border-bottom: none;"></div>
+              </div>
+
+              <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 12px; border: 2px solid ${manager.primaryColor}; text-align: center; z-index: 20; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                 <div style="font-size: 0.8rem; text-transform: uppercase; color: #bbb; letter-spacing: 1px; margin-bottom: 5px;">Budget Remaining</div>
+                 <div style="font-family: var(--font-display); font-size: 2.5rem; color: ${manager.secondaryColor}; line-height: 1; text-shadow: 0 0 10px ${manager.secondaryColor}40;">
+                    ${this.formatCurrency(manager.budget)}
+                 </div>
+              </div>
+              
+              ${this.generateFormationSlots(managerPlayers, manager)}
             </div>
           </div>
-          <div class="team-budget">
-            <div class="budget-label">Remaining Budget</div>
-            <div class="budget-amount">${this.formatCurrency(manager.budget)}</div>
-          </div>
-        </div>
-        <div class="formation-container">
-          <div class="formation-pitch">
-            <div class="pitch-lines">
-              <div class="pitch-center-circle"></div>
-              <div class="pitch-center-line"></div>
-              <div class="pitch-goal-area top"></div>
-              <div class="pitch-goal-area bottom"></div>
-            </div>
-            ${this.generateFormationSlots(managerPlayers, manager)}
-          </div>
-        </div>
       `;
     });
   }
 
-  generateFormationSlots(players, manager) {
-    // 1-2-2 formation positions (percentages)
+ generateFormationSlots(players, manager) {
+    // 7 POSITIONS: 1 GK, 2 DEF, 2 MID, 2 ATT
     const positions = [
-      { name: 'GK', top: 85, left: 50 },
-      { name: 'DEF', top: 65, left: 25 },
-      { name: 'DEF', top: 65, left: 75 },
-      { name: 'MID', top: 40, left: 25 },
-      { name: 'MID', top: 40, left: 75 },
-      { name: 'ATT', top: 15, left: 50 }
+      { name: 'GK', top: 88, left: 50 },
+      { name: 'DEF', top: 68, left: 30 },
+      { name: 'DEF', top: 68, left: 70 },
+      { name: 'MID', top: 45, left: 30 },
+      { name: 'MID', top: 45, left: 70 },
+      { name: 'ATT', top: 20, left: 35 },
+      { name: 'ATT', top: 20, left: 65 }
     ];
 
     // Map players to positions based on their assigned positions or category
-    const assignedPlayers = new Array(6).fill(null);
+    const assignedPlayers = new Array(7).fill(null); // Correctly sized for 7 players
 
     // Check if manager has position assignments
     if (manager.players && manager.players.length > 0) {
       manager.players.forEach(mp => {
         const player = players.find(p => p.id === mp.id);
-        if (player && mp.position !== null && mp.position >= 0 && mp.position < 6) {
+        
+        // FIX: Changed '< 6' to '< 7' so the 7th player can be assigned
+        if (player && mp.position !== null && mp.position >= 0 && mp.position < 7) {
           assignedPlayers[mp.position] = player;
         }
       });

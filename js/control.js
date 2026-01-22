@@ -234,10 +234,10 @@ class AuctionControl {
     const manager = this.managers.find(m => m.id === managerId);
     const teamPlayers = this.players.filter(p => p.soldTo === managerId);
 
-    const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT'];
+const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
 
     // Get current assignments
-    const assignments = new Array(6).fill(null);
+    const assignments = new Array(7).fill(null);
     if (manager.players) {
       manager.players.forEach(mp => {
         if (mp.position !== null && mp.position >= 0 && mp.position < 6) {
@@ -465,7 +465,7 @@ class AuctionControl {
     return parseInt(cleaned) || 0;
   }
 
-  sendBidUpdate() {
+sendBidUpdate() {
     // Add to history
     const manager = this.selectedManagerId ?
       this.managers.find(m => m.id === this.selectedManagerId) : null;
@@ -478,7 +478,8 @@ class AuctionControl {
 
     auctionSync.send(SYNC_MESSAGES.UPDATE_BID, {
       amount: this.currentBid,
-      history: this.bidHistory
+      history: this.bidHistory,
+      managerId: this.selectedManagerId // <--- CRITICAL ADDITION
     });
   }
 

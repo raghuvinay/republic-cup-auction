@@ -30,7 +30,7 @@ const mimeTypes = {
 
 const server = http.createServer((req, res) => {
   // Parse URL and remove query strings
-  let filePath = req.url.split('?')[0];
+  let filePath = decodeURI(req.url.split('?')[0]);
 
   // Default to index.html
   if (filePath === '/') {

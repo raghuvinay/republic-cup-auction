@@ -30,8 +30,10 @@ class AuctionSync {
       this.setupLocalStorageFallback();
     }
 
-    // Also listen to storage events for cross-tab sync
+// Also listen to storage events for cross-tab sync
     window.addEventListener('storage', (event) => {
+      if (this.channel) return; // <--- ADD THIS LINE: Ignores backup if main connection works
+      
       if (event.key === this.messageKey && event.newValue) {
         try {
           const message = JSON.parse(event.newValue);

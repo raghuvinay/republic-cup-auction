@@ -1,0 +1,44 @@
+{
+  "managers": [
+    {
+      "id": 1,
+      "name": "Manager One",
+      "teamName": "Thunder FC",
+      "primaryColor": "#e90052",
+      "secondaryColor": "#04f5ff",
+      "logo": "assets/teams/team1.png",
+      "budget": 100000000,
+      "players": []
+    },
+    {
+      "id": 2,
+      "name": "Manager Two",
+      "teamName": "Phoenix United",
+      "primaryColor": "#00ff85",
+      "secondaryColor": "#38003c",
+      "logo": "assets/teams/team2.png",
+      "budget": 100000000,
+      "players": []
+    },
+    {
+      "id": 3,
+      "name": "Manager Three",
+      "teamName": "Storm City",
+      "primaryColor": "#ffd700",
+      "secondaryColor": "#1a1a2e",
+      "logo": "assets/teams/team3.png",
+      "budget": 100000000,
+      "players": []
+    },
+    {
+      "id": 4,
+      "name": "Manager Four",
+      "teamName": "Royal Lions",
+      "primaryColor": "#6c5ce7",
+      "secondaryColor": "#ffffff",
+      "logo": "assets/teams/team4.png",
+      "budget": 100000000,
+      "players": []
+    }
+  ]
+}

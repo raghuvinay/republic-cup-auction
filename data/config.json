@@ -1,0 +1,45 @@
+{
+  "tournamentName": "Republic Cup 2026",
+  "totalBudget": 100000000,
+  "currency": "€",
+  "currencySymbol": "€",
+  "bidIncrements": [100000, 500000, 1000000, 2000000, 5000000],
+  "defaultBidIncrement": 500000,
+  "basePrices": {
+    "GK": 5000000,
+    "DEF": 8000000,
+    "MID": 10000000,
+    "ATT": 12000000
+  },
+  "formation": {
+    "type": "1-2-2",
+    "positions": {
+      "GK": { "row": 1, "col": 2 },
+      "DEF1": { "row": 2, "col": 1 },
+      "DEF2": { "row": 2, "col": 3 },
+      "MID1": { "row": 3, "col": 1 },
+      "MID2": { "row": 3, "col": 3 },
+      "ATT": { "row": 4, "col": 2 }
+    }
+  },
+  "playersPerTeam": 6,
+  "categories": ["GK", "DEF", "MID", "ATT"],
+  "categoryNames": {
+    "GK": "Goalkeeper",
+    "DEF": "Defender",
+    "MID": "Midfielder",
+    "ATT": "Attacker"
+  },
+  "animations": {
+    "revealStyle": "flip",
+    "soldStyle": "zoom",
+    "confettiEnabled": true
+  },
+  "sounds": {
+    "enabled": false,
+    "teaser": "assets/sounds/teaser.mp3",
+    "reveal": "assets/sounds/reveal.mp3",
+    "sold": "assets/sounds/sold.mp3",
+    "bid": "assets/sounds/bid.mp3"
+  }
+}

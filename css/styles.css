@@ -1,0 +1,1633 @@
+/* ============================================
+   FOOTBALL AUCTION - PREMIER LEAGUE STYLE
+   ============================================
+
+   COLOR PALETTE - CHANGE THESE TO UPDATE ALL COLORS
+   Simply modify the values below to change the entire look!
+
+   ============================================ */
+
+:root {
+  /* === PRIMARY COLORS === */
+  --primary-color: #37003c;           /* Deep purple - main brand color */
+  --primary-light: #5a0063;           /* Lighter purple for hover states */
+  --primary-dark: #1a001e;            /* Darker purple for shadows */
+
+  /* === ACCENT COLORS === */
+  --accent-color: #00ff85;            /* Neon green - highlights, buttons */
+  --accent-secondary: #e90052;        /* Pink/magenta - secondary accent */
+  --accent-tertiary: #04f5ff;         /* Cyan - tertiary accent */
+
+  /* === BACKGROUND COLORS === */
+  --bg-primary: #1a1a2e;              /* Main background */
+  --bg-secondary: #16213e;            /* Card backgrounds */
+  --bg-tertiary: #0f0f1a;             /* Darker sections */
+  --bg-overlay: rgba(0, 0, 0, 0.85);  /* Overlay for modals */
+
+  /* === TEXT COLORS === */
+  --text-primary: #ffffff;            /* Main text */
+  --text-secondary: #b8b8b8;          /* Secondary text */
+  --text-muted: #666666;              /* Muted/disabled text */
+  --text-dark: #1a1a2e;               /* Text on light backgrounds */
+
+  /* === PLAYER CARD COLORS === */
+  --card-gold: #ffd700;               /* Gold card background */
+  --card-silver: #c0c0c0;             /* Silver card background */
+  --card-bronze: #cd7f32;             /* Bronze card background */
+  --card-default: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* === STATUS COLORS === */
+  --success-color: #00ff85;           /* Success/sold */
+  --warning-color: #ffd700;           /* Warning/bidding */
+  --error-color: #ff4757;             /* Error/unsold */
+  --info-color: #04f5ff;              /* Information */
+
+  /* === CATEGORY COLORS === */
+  --cat-gk: #ff9f43;                  /* Goalkeeper - Orange */
+  --cat-def: #00d2d3;                 /* Defender - Cyan */
+  --cat-mid: #00ff85;                 /* Midfielder - Green */
+  --cat-att: #ff6b6b;                 /* Attacker - Red */
+
+  /* === TEAM COLORS (defaults - overridden by manager data) === */
+  --team1-primary: #e90052;
+  --team1-secondary: #04f5ff;
+  --team2-primary: #00ff85;
+  --team2-secondary: #38003c;
+  --team3-primary: #ffd700;
+  --team3-secondary: #1a1a2e;
+  --team4-primary: #6c5ce7;
+  --team4-secondary: #ffffff;
+
+  /* === FONTS === */
+  --font-primary: 'Montserrat', 'Segoe UI', sans-serif;
+  --font-display: 'Bebas Neue', 'Impact', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  /* === SIZING === */
+  --border-radius: 12px;
+  --border-radius-sm: 6px;
+  --border-radius-lg: 20px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+
+  /* === SHADOWS === */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30px rgba(0, 255, 133, 0.3);
+
+  /* === TRANSITIONS === */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-primary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700;800;900&family=JetBrains+Mono&display=swap');
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-xl);
+  z-index: 100;
+  border-bottom: 3px solid var(--accent-color);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-logo img {
+  height: 50px;
+}
+
+.header-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-tertiary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.header-stat {
+  text-align: center;
+}
+
+.header-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+
+.main-content {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+/* ============================================
+   VIEW CONTAINERS
+   ============================================ */
+
+.view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.view.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ============================================
+   TEASER VIEW
+   ============================================ */
+
+.teaser-view {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  padding: var(--spacing-xl);
+}
+
+.teaser-container {
+  max-width: 900px;
+  text-align: center;
+}
+
+.teaser-label {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: var(--spacing-md);
+  animation: pulse 2s infinite;
+}
+
+.teaser-title {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  margin-bottom: var(--spacing-xl);
+  color: var(--text-primary);
+}
+
+.teaser-funfact {
+  font-size: 1.8rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  padding: var(--spacing-xl);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border-left: 5px solid var(--accent-color);
+  margin-bottom: var(--spacing-xl);
+  animation: fadeInUp 0.8s ease;
+}
+
+.teaser-category {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--primary-color);
+  border-radius: var(--border-radius);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.teaser-category.GK { background: var(--cat-gk); color: var(--text-dark); }
+.teaser-category.DEF { background: var(--cat-def); color: var(--text-dark); }
+.teaser-category.MID { background: var(--cat-mid); color: var(--text-dark); }
+.teaser-category.ATT { background: var(--cat-att); color: var(--text-dark); }
+
+.teaser-hint {
+  margin-top: var(--spacing-xl);
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   PLAYER CARD - FIFA STYLE
+   ============================================ */
+
+.player-card-container {
+  perspective: 1000px;
+  width: 350px;
+  height: 500px;
+}
+
+.player-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.player-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.player-card-front,
+.player-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.player-card-front {
+  background: var(--card-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-card-front::before {
+  content: '?';
+  font-family: var(--font-display);
+  font-size: 12rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.player-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #1a1a2e 0%, #37003c 50%, #1a1a2e 100%);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-sm);
+}
+
+.card-rating {
+  text-align: center;
+}
+
+.card-overall {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--accent-color);
+}
+
+.card-position {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.card-trait {
+  background: var(--accent-secondary);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Card Photo */
+.card-photo-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: var(--spacing-sm) 0;
+}
+
+.card-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent-color);
+  box-shadow: var(--shadow-glow);
+}
+
+.card-photo-placeholder {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--accent-color);
+  font-size: 4rem;
+  color: var(--text-muted);
+}
+
+/* Card Name */
+.card-name {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(90deg, var(--text-primary), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card Attributes */
+.card-attributes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
+}
+
+.card-attribute {
+  text-align: center;
+}
+
+.attr-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+
+.attr-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   REVEAL VIEW
+   ============================================ */
+
+.reveal-view {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  gap: var(--spacing-xl);
+}
+
+.reveal-card-wrapper {
+  transform: scale(0);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.reveal-card-wrapper.revealed {
+  transform: scale(1);
+}
+
+.reveal-info {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s ease 0.3s;
+}
+
+.reveal-info.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-base-price {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--accent-color);
+}
+
+.reveal-base-label {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* ============================================
+   AUCTION VIEW
+   ============================================ */
+
+.auction-view {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background: var(--bg-primary);
+}
+
+.auction-player-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.auction-bidding-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-xl);
+}
+
+.current-bid-display {
+  text-align: center;
+  padding: var(--spacing-xxl);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 3px solid var(--accent-color);
+  box-shadow: var(--shadow-glow);
+}
+
+.bid-label {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: var(--spacing-md);
+}
+
+.bid-amount {
+  font-family: var(--font-display);
+  font-size: 6rem;
+  color: var(--accent-color);
+  line-height: 1;
+  animation: bidPulse 1s ease infinite;
+}
+
+.bid-history {
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.bid-history-title {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: var(--spacing-md);
+}
+
+.bid-history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.bid-history-item:last-child {
+  border-bottom: none;
+}
+
+/* ============================================
+   SOLD OVERLAY
+   ============================================ */
+
+.sold-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-overlay);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.sold-overlay.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.sold-content {
+  text-align: center;
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sold-overlay.active .sold-content {
+  transform: scale(1);
+}
+
+.sold-badge {
+  font-family: var(--font-display);
+  font-size: 8rem;
+  color: var(--accent-color);
+  text-shadow: 0 0 50px var(--accent-color);
+  animation: soldBounce 0.6s ease;
+}
+
+.sold-details {
+  margin-top: var(--spacing-xl);
+}
+
+.sold-player-name {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.sold-to-team {
+  font-size: 2rem;
+  color: var(--accent-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.sold-price {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--accent-color);
+}
+
+/* ============================================
+   TEAM VIEWS
+   ============================================ */
+
+.team-view {
+  padding: var(--spacing-xl);
+  background: var(--bg-primary);
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 3px solid var(--accent-color);
+}
+
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.team-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+}
+
+.team-logo-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border: 3px solid var(--accent-color);
+}
+
+.team-name {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  letter-spacing: 2px;
+}
+
+.team-manager {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.team-budget {
+  text-align: right;
+}
+
+.budget-label {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.budget-amount {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--accent-color);
+}
+
+/* Formation Display */
+.formation-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.formation-pitch {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 4/3;
+  background: linear-gradient(180deg, #2d8a4e 0%, #1e6b3a 100%);
+  border-radius: var(--border-radius-lg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.pitch-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.pitch-center-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.pitch-center-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.pitch-goal-area {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 60px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.pitch-goal-area.top {
+  top: 0;
+  border-top: none;
+}
+
+.pitch-goal-area.bottom {
+  bottom: 0;
+  border-bottom: none;
+}
+
+/* Formation Slots */
+.formation-slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: all var(--transition-normal);
+}
+
+.formation-slot.empty {
+  opacity: 0.5;
+}
+
+.slot-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+  background: var(--bg-secondary);
+}
+
+.slot-photo-empty {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 3px dashed rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.slot-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.slot-position {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+/* ============================================
+   MASTER OVERVIEW
+   ============================================ */
+
+.master-view {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  height: 100%;
+}
+
+.master-team-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+  transition: border-color var(--transition-normal);
+}
+
+.master-team-card:hover {
+  border-color: var(--accent-color);
+}
+
+.master-team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--bg-tertiary);
+}
+
+.master-team-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.master-team-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.master-team-name {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+}
+
+.master-team-budget {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+
+.master-team-players {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  align-content: start;
+}
+
+.master-player-slot {
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.master-player-slot.empty {
+  opacity: 0.3;
+  border: 2px dashed var(--text-muted);
+}
+
+.master-player-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.master-player-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.master-player-price {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+}
+
+/* ============================================
+   BUDGET TRACKER VIEW
+   ============================================ */
+
+.budget-view {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.budget-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.budget-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-xl);
+  flex: 1;
+}
+
+.budget-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-left: 5px solid var(--accent-color);
+}
+
+.budget-team-name {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.budget-remaining {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  color: var(--accent-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.budget-spent {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.budget-bar {
+  width: 100%;
+  height: 20px;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: var(--spacing-lg);
+}
+
+.budget-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-tertiary));
+  transition: width var(--transition-normal);
+}
+
+.budget-player-count {
+  margin-top: var(--spacing-lg);
+  font-size: 1.2rem;
+}
+
+/* ============================================
+   SOLD/UNSOLD VIEW
+   ============================================ */
+
+.soldlist-view {
+  padding: var(--spacing-xl);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+.soldlist-section {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+}
+
+.soldlist-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 3px solid var(--accent-color);
+}
+
+.soldlist-title.unsold {
+  border-bottom-color: var(--error-color);
+}
+
+.soldlist-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.soldlist-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius);
+}
+
+.soldlist-item-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.soldlist-item-info {
+  flex: 1;
+}
+
+.soldlist-item-name {
+  font-weight: 600;
+}
+
+.soldlist-item-category {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.soldlist-item-price {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--accent-color);
+}
+
+.soldlist-item-team {
+  font-size: 0.9rem;
+  color: var(--accent-secondary);
+}
+
+/* ============================================
+   CONTROL PANEL STYLES
+   ============================================ */
+
+.control-panel {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-lg);
+}
+
+.control-header {
+  background: var(--primary-color);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--accent-color);
+}
+
+.control-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--error-color);
+}
+
+.status-dot.connected {
+  background: var(--success-color);
+  animation: pulse 2s infinite;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.control-section {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--bg-tertiary);
+}
+
+/* Player Selection */
+.player-select-list {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.player-select-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 2px solid transparent;
+}
+
+.player-select-item:hover {
+  background: var(--bg-primary);
+  border-color: var(--accent-color);
+}
+
+.player-select-item.selected {
+  border-color: var(--accent-color);
+  background: var(--primary-color);
+}
+
+.player-select-item.sold {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.player-select-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.player-select-info {
+  flex: 1;
+}
+
+.player-select-name {
+  font-weight: 600;
+}
+
+.player-select-category {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.player-select-category.GK { background: var(--cat-gk); color: var(--text-dark); }
+.player-select-category.DEF { background: var(--cat-def); color: var(--text-dark); }
+.player-select-category.MID { background: var(--cat-mid); color: var(--text-dark); }
+.player-select-category.ATT { background: var(--cat-att); color: var(--text-dark); }
+
+.player-select-price {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--accent-color);
+}
+
+/* Auction Controls */
+.auction-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.current-player-display {
+  background: var(--bg-tertiary);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.current-player-name {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.bid-input-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.bid-input {
+  flex: 1;
+  padding: var(--spacing-md);
+  font-size: 1.5rem;
+  font-family: var(--font-display);
+  background: var(--bg-tertiary);
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.bid-input:focus {
+  outline: none;
+  box-shadow: var(--shadow-glow);
+}
+
+.bid-increment-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.btn {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: var(--text-dark);
+}
+
+.btn-primary:hover {
+  background: var(--accent-tertiary);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--accent-color);
+}
+
+.btn-secondary:hover {
+  background: var(--accent-color);
+  color: var(--text-dark);
+}
+
+.btn-danger {
+  background: var(--error-color);
+  color: var(--text-primary);
+}
+
+.btn-danger:hover {
+  filter: brightness(1.2);
+}
+
+.btn-success {
+  background: var(--success-color);
+  color: var(--text-dark);
+}
+
+.btn-success:hover {
+  filter: brightness(1.1);
+}
+
+.btn-large {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  font-size: 1.5rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Manager Selection */
+.manager-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.manager-btn {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.manager-btn:hover {
+  border-color: var(--accent-color);
+}
+
+.manager-btn.selected {
+  border-color: var(--accent-color);
+  background: var(--primary-color);
+}
+
+.manager-btn-name {
+  font-weight: 600;
+}
+
+.manager-btn-team {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.manager-btn-budget {
+  font-family: var(--font-display);
+  color: var(--accent-color);
+}
+
+/* View Controls */
+.view-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.view-btn {
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.view-btn:hover {
+  border-color: var(--accent-color);
+}
+
+.view-btn.active {
+  background: var(--accent-color);
+  color: var(--text-dark);
+}
+
+.view-btn-label {
+  font-weight: 600;
+}
+
+.view-btn-shortcut {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.view-btn.active .view-btn-shortcut {
+  color: var(--text-dark);
+}
+
+/* Export Controls */
+.export-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* Auction History */
+.history-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes bidPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes soldBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-color); }
+  50% { box-shadow: 0 0 40px var(--accent-color), 0 0 60px var(--accent-color); }
+}
+
+/* ============================================
+   CONFETTI CANVAS
+   ============================================ */
+
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ============================================
+   KEYBOARD HINTS
+   ============================================ */
+
+.keyboard-hints {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+  background: var(--bg-overlay);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+  z-index: 50;
+  opacity: 0.7;
+  transition: opacity var(--transition-normal);
+}
+
+.keyboard-hints:hover {
+  opacity: 1;
+}
+
+.keyboard-hint {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.kbd {
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 1400px) {
+  .master-view {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .budget-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .auction-view {
+    grid-template-columns: 1fr;
+  }
+
+  .control-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }

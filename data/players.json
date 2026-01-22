@@ -1,0 +1,484 @@
+{
+  "players": [
+    {
+      "id": 1,
+      "name": "Alex Thunder",
+      "photo": "assets/players/player1.jpg",
+      "category": "GK",
+      "attributes": {
+        "pace": 45,
+        "shooting": 25,
+        "passing": 55,
+        "dribbling": 40,
+        "defense": 30,
+        "physical": 85
+      },
+      "funFact": "This player once saved 5 penalties in a single tournament and is known for their incredible reflexes. They say they learned goalkeeping by catching mangoes falling from trees!",
+      "oneWordTrait": "The Wall",
+      "basePrice": 5000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 2,
+      "name": "Marcus Steel",
+      "photo": "assets/players/player2.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 75,
+        "shooting": 45,
+        "passing": 65,
+        "dribbling": 55,
+        "defense": 88,
+        "physical": 82
+      },
+      "funFact": "This defender has never been dribbled past in any office tournament. Legend says attackers see their career flash before their eyes when facing this player!",
+      "oneWordTrait": "Unbreakable",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 3,
+      "name": "Leo Spark",
+      "photo": "assets/players/player3.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 82,
+        "shooting": 78,
+        "passing": 90,
+        "dribbling": 85,
+        "defense": 55,
+        "physical": 65
+      },
+      "funFact": "This midfielder's passing accuracy is so precise, they once assisted a goal from their own half. Off the pitch, they're famous for their terrible dance moves at office parties!",
+      "oneWordTrait": "Maestro",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 4,
+      "name": "Ryan Blaze",
+      "photo": "assets/players/player4.jpg",
+      "category": "ATT",
+      "attributes": {
+        "pace": 95,
+        "shooting": 88,
+        "passing": 70,
+        "dribbling": 90,
+        "defense": 25,
+        "physical": 68
+      },
+      "funFact": "This striker scored a hat-trick eating a sandwich between goals (true story!). Known in the office as 'The Snack Attack' - dangerous with both food and football!",
+      "oneWordTrait": "Lightning",
+      "basePrice": 12000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 5,
+      "name": "Player Five",
+      "photo": "assets/players/player5.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 70,
+        "shooting": 40,
+        "passing": 72,
+        "dribbling": 60,
+        "defense": 85,
+        "physical": 78
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Warrior",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 6,
+      "name": "Player Six",
+      "photo": "assets/players/player6.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 78,
+        "shooting": 75,
+        "passing": 82,
+        "dribbling": 80,
+        "defense": 60,
+        "physical": 70
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Engine",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 7,
+      "name": "Player Seven",
+      "photo": "assets/players/player7.jpg",
+      "category": "ATT",
+      "attributes": {
+        "pace": 88,
+        "shooting": 85,
+        "passing": 65,
+        "dribbling": 82,
+        "defense": 30,
+        "physical": 72
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Finisher",
+      "basePrice": 12000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 8,
+      "name": "Player Eight",
+      "photo": "assets/players/player8.jpg",
+      "category": "GK",
+      "attributes": {
+        "pace": 42,
+        "shooting": 20,
+        "passing": 60,
+        "dribbling": 35,
+        "defense": 28,
+        "physical": 80
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Safe Hands",
+      "basePrice": 5000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 9,
+      "name": "Player Nine",
+      "photo": "assets/players/player9.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 72,
+        "shooting": 35,
+        "passing": 68,
+        "dribbling": 58,
+        "defense": 82,
+        "physical": 85
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Rock",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 10,
+      "name": "Player Ten",
+      "photo": "assets/players/player10.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 80,
+        "shooting": 72,
+        "passing": 85,
+        "dribbling": 78,
+        "defense": 65,
+        "physical": 68
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Playmaker",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 11,
+      "name": "Player Eleven",
+      "photo": "assets/players/player11.jpg",
+      "category": "ATT",
+      "attributes": {
+        "pace": 90,
+        "shooting": 82,
+        "passing": 68,
+        "dribbling": 85,
+        "defense": 28,
+        "physical": 65
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Speed Demon",
+      "basePrice": 12000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 12,
+      "name": "Player Twelve",
+      "photo": "assets/players/player12.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 68,
+        "shooting": 42,
+        "passing": 70,
+        "dribbling": 55,
+        "defense": 88,
+        "physical": 80
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Shield",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 13,
+      "name": "Player Thirteen",
+      "photo": "assets/players/player13.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 75,
+        "shooting": 80,
+        "passing": 78,
+        "dribbling": 76,
+        "defense": 58,
+        "physical": 72
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Box-to-Box",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 14,
+      "name": "Player Fourteen",
+      "photo": "assets/players/player14.jpg",
+      "category": "ATT",
+      "attributes": {
+        "pace": 85,
+        "shooting": 90,
+        "passing": 62,
+        "dribbling": 80,
+        "defense": 25,
+        "physical": 70
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Sharpshooter",
+      "basePrice": 12000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 15,
+      "name": "Player Fifteen",
+      "photo": "assets/players/player15.jpg",
+      "category": "GK",
+      "attributes": {
+        "pace": 40,
+        "shooting": 22,
+        "passing": 58,
+        "dribbling": 38,
+        "defense": 32,
+        "physical": 82
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Cat-like",
+      "basePrice": 5000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 16,
+      "name": "Player Sixteen",
+      "photo": "assets/players/player16.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 74,
+        "shooting": 38,
+        "passing": 66,
+        "dribbling": 52,
+        "defense": 86,
+        "physical": 84
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Anchor",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 17,
+      "name": "Player Seventeen",
+      "photo": "assets/players/player17.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 82,
+        "shooting": 76,
+        "passing": 88,
+        "dribbling": 84,
+        "defense": 52,
+        "physical": 66
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Wizard",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 18,
+      "name": "Player Eighteen",
+      "photo": "assets/players/player18.jpg",
+      "category": "ATT",
+      "attributes": {
+        "pace": 92,
+        "shooting": 84,
+        "passing": 66,
+        "dribbling": 88,
+        "defense": 22,
+        "physical": 64
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Rocket",
+      "basePrice": 12000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 19,
+      "name": "Player Nineteen",
+      "photo": "assets/players/player19.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 70,
+        "shooting": 36,
+        "passing": 64,
+        "dribbling": 50,
+        "defense": 84,
+        "physical": 88
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Tank",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 20,
+      "name": "Player Twenty",
+      "photo": "assets/players/player20.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 78,
+        "shooting": 74,
+        "passing": 80,
+        "dribbling": 82,
+        "defense": 56,
+        "physical": 70
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Metronome",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 21,
+      "name": "Player Twenty-One",
+      "photo": "assets/players/player21.jpg",
+      "category": "ATT",
+      "attributes": {
+        "pace": 86,
+        "shooting": 86,
+        "passing": 70,
+        "dribbling": 84,
+        "defense": 26,
+        "physical": 68
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Predator",
+      "basePrice": 12000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 22,
+      "name": "Player Twenty-Two",
+      "photo": "assets/players/player22.jpg",
+      "category": "GK",
+      "attributes": {
+        "pace": 44,
+        "shooting": 18,
+        "passing": 62,
+        "dribbling": 36,
+        "defense": 34,
+        "physical": 78
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Guardian",
+      "basePrice": 5000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 23,
+      "name": "Player Twenty-Three",
+      "photo": "assets/players/player23.jpg",
+      "category": "DEF",
+      "attributes": {
+        "pace": 76,
+        "shooting": 44,
+        "passing": 68,
+        "dribbling": 56,
+        "defense": 80,
+        "physical": 82
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Captain",
+      "basePrice": 8000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 24,
+      "name": "Player Twenty-Four",
+      "photo": "assets/players/player24.jpg",
+      "category": "MID",
+      "attributes": {
+        "pace": 84,
+        "shooting": 78,
+        "passing": 86,
+        "dribbling": 80,
+        "defense": 54,
+        "physical": 64
+      },
+      "funFact": "Add your fun fact here - make it entertaining for the audience to guess!",
+      "oneWordTrait": "Dynamo",
+      "basePrice": 10000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    }
+  ]
+}

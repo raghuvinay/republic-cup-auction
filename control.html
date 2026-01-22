@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Auction - Control Panel</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      overflow: auto;
+    }
+    .control-panel {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="control-panel">
+    <!-- Header -->
+    <div class="control-header">
+      <h1 class="control-title">Auction Control Panel</h1>
+      <div class="control-status">
+        <span class="status-dot" id="syncStatus"></span>
+        <span id="syncStatusText">Connecting...</span>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="control-grid">
+      <!-- Left Column: Player Selection -->
+      <div class="control-section">
+        <h2 class="section-title">Select Player</h2>
+        <div class="player-select-list" id="playerSelectList">
+          <!-- Players generated dynamically -->
+        </div>
+      </div>
+
+      <!-- Right Column: Auction Controls -->
+      <div class="control-section">
+        <h2 class="section-title">Auction Controls</h2>
+
+        <!-- Current Player Display -->
+        <div class="current-player-display" id="currentPlayerDisplay">
+          <div class="current-player-name" id="controlCurrentPlayer">No player selected</div>
+          <div class="text-secondary" id="controlCurrentCategory">Select a player to start</div>
+        </div>
+
+        <!-- Auction Phase Buttons -->
+        <div class="auction-controls">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+            <button class="btn btn-primary btn-large" id="btnTeaser" disabled>
+              Show Teaser
+            </button>
+            <button class="btn btn-secondary btn-large" id="btnReveal" disabled>
+              Reveal Player
+            </button>
+            <button class="btn btn-secondary btn-large" id="btnStartBid" disabled>
+              Start Bidding
+            </button>
+          </div>
+
+          <!-- Bid Controls -->
+          <h3 class="section-title">Current Bid</h3>
+          <div class="bid-input-group">
+            <input type="text" class="bid-input" id="bidInput" placeholder="Enter bid amount" value="0">
+          </div>
+
+          <div class="bid-increment-buttons">
+            <button class="btn btn-secondary" data-increment="100000">+100K</button>
+            <button class="btn btn-secondary" data-increment="500000">+500K</button>
+            <button class="btn btn-secondary" data-increment="1000000">+1M</button>
+            <button class="btn btn-secondary" data-increment="2000000">+2M</button>
+            <button class="btn btn-secondary" data-increment="5000000">+5M</button>
+          </div>
+
+          <button class="btn btn-primary" id="btnUpdateBid" style="width: 100%; margin-bottom: var(--spacing-md);">
+            Update Bid Display
+          </button>
+
+          <!-- Sell Controls -->
+          <h3 class="section-title">Sell To Manager</h3>
+          <div class="manager-buttons" id="managerButtons">
+            <!-- Manager buttons generated dynamically -->
+          </div>
+
+          <button class="btn btn-success btn-large" id="btnSold" disabled style="width: 100%; margin-top: var(--spacing-md);">
+            MARK AS SOLD
+          </button>
+
+          <button class="btn btn-danger" id="btnUnsold" disabled style="width: 100%; margin-top: var(--spacing-sm);">
+            Mark Unsold (Skip)
+          </button>
+
+          <button class="btn btn-secondary" id="btnReset" style="width: 100%; margin-top: var(--spacing-md);">
+            Reset Current Auction
+          </button>
+        </div>
+      </div>
+
+      <!-- View Controls -->
+      <div class="control-section">
+        <h2 class="section-title">Presentation View Controls</h2>
+        <div class="view-buttons">
+          <button class="view-btn active" data-view="welcome">
+            <div class="view-btn-label">Welcome</div>
+            <div class="view-btn-shortcut">W</div>
+          </button>
+          <button class="view-btn" data-view="teaser">
+            <div class="view-btn-label">Teaser</div>
+            <div class="view-btn-shortcut">T</div>
+          </button>
+          <button class="view-btn" data-view="reveal">
+            <div class="view-btn-label">Reveal</div>
+            <div class="view-btn-shortcut">R</div>
+          </button>
+          <button class="view-btn" data-view="auction">
+            <div class="view-btn-label">Auction</div>
+            <div class="view-btn-shortcut">Esc</div>
+          </button>
+          <button class="view-btn" data-view="master">
+            <div class="view-btn-label">All Teams</div>
+            <div class="view-btn-shortcut">M</div>
+          </button>
+          <button class="view-btn" data-view="budget">
+            <div class="view-btn-label">Budgets</div>
+            <div class="view-btn-shortcut">B</div>
+          </button>
+          <button class="view-btn" data-view="soldlist">
+            <div class="view-btn-label">Sold List</div>
+            <div class="view-btn-shortcut">S</div>
+          </button>
+          <button class="view-btn" data-view="team1">
+            <div class="view-btn-label">Team 1</div>
+            <div class="view-btn-shortcut">1</div>
+          </button>
+          <button class="view-btn" data-view="team2">
+            <div class="view-btn-label">Team 2</div>
+            <div class="view-btn-shortcut">2</div>
+          </button>
+          <button class="view-btn" data-view="team3">
+            <div class="view-btn-label">Team 3</div>
+            <div class="view-btn-shortcut">3</div>
+          </button>
+          <button class="view-btn" data-view="team4">
+            <div class="view-btn-label">Team 4</div>
+            <div class="view-btn-shortcut">4</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Team Lineup Management -->
+      <div class="control-section">
+        <h2 class="section-title">Team Lineup Management</h2>
+        <div style="margin-bottom: var(--spacing-md);">
+          <label style="display: block; margin-bottom: var(--spacing-sm);">Select Team:</label>
+          <select id="lineupTeamSelect" class="bid-input" style="width: 100%; font-size: 1rem;">
+            <option value="">-- Select Team --</option>
+          </select>
+        </div>
+        <div id="lineupManagement" style="display: none;">
+          <div id="lineupSlots"></div>
+        </div>
+      </div>
+
+      <!-- Export & Data -->
+      <div class="control-section">
+        <h2 class="section-title">Export & Data</h2>
+        <div class="export-buttons" style="flex-wrap: wrap;">
+          <button class="btn btn-primary" id="btnExportJSON">Export JSON</button>
+          <button class="btn btn-primary" id="btnExportCSV">Export CSV</button>
+          <button class="btn btn-secondary" id="btnSaveState">Save State</button>
+          <button class="btn btn-secondary" id="btnLoadState">Load State</button>
+          <button class="btn btn-danger" id="btnResetAll">Reset All Data</button>
+        </div>
+        <div style="margin-top: var(--spacing-md);">
+          <input type="file" id="importFile" accept=".json" style="display: none;">
+          <button class="btn btn-secondary" id="btnImportState" style="width: 100%;">Import Saved State</button>
+        </div>
+      </div>
+
+      <!-- Auction History -->
+      <div class="control-section">
+        <h2 class="section-title">Auction History</h2>
+        <div class="history-list" id="auctionHistory">
+          <p class="text-secondary">No auctions completed yet</p>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="control-section">
+        <h2 class="section-title">Statistics</h2>
+        <div id="statsDisplay">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+            <div class="current-player-display">
+              <div class="text-secondary">Most Expensive</div>
+              <div class="current-player-name" id="statMostExpensive">-</div>
+              <div class="text-accent" id="statMostExpensivePrice">-</div>
+            </div>
+            <div class="current-player-display">
+              <div class="text-secondary">Biggest Bargain</div>
+              <div class="current-player-name" id="statBiggestBargain">-</div>
+              <div class="text-accent" id="statBiggestBargainSaving">-</div>
+            </div>
+            <div class="current-player-display">
+              <div class="text-secondary">Total Spent</div>
+              <div class="current-player-name text-accent" id="statTotalSpent">€0</div>
+            </div>
+            <div class="current-player-display">
+              <div class="text-secondary">Average Price</div>
+              <div class="current-player-name text-accent" id="statAveragePrice">€0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/sync.js"></script>
+  <script src="js/control.js"></script>
+</body>
+</html>

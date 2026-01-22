@@ -1,0 +1,17 @@
+{
+  "name": "football-auction",
+  "version": "1.0.0",
+  "description": "Football Auction System for Company Tournament",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "football",
+    "auction",
+    "tournament"
+  ],
+  "author": "",
+  "license": "ISC"
+}

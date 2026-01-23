@@ -396,7 +396,7 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
     if (this.currentPlayer) {
       nameEl.textContent = this.currentPlayer.name;
       catEl.textContent = `${this.config.categoryNames[this.currentPlayer.category]} - Base: ${this.formatCurrency(this.currentPlayer.basePrice)}`;
-      bidInput.value = this.currentBid;
+      bidInput.value = this.currentBid / 1000000;
 
       // Enable buttons
       document.getElementById('btnTeaser').disabled = false;
@@ -533,7 +533,7 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
 
       if (this.currentBid > maxSpendable) {
         this.currentBid = maxSpendable;
-        document.getElementById('bidInput').value = this.currentBid;
+        document.getElementById('bidInput').value = this.currentBid / 1000000;
         if (budgetInfo.playersNeeded > 1) {
           this.showValidationMessage(
             `Bid capped to ${this.formatCurrency(maxSpendable)} (reserving for ${budgetInfo.playersNeeded - 1} more players)`
@@ -582,7 +582,7 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
     // Validate: If current bid exceeds manager's max spendable, cap it
     if (this.currentBid > maxSpendable) {
       this.currentBid = maxSpendable;
-      document.getElementById('bidInput').value = this.currentBid;
+      document.getElementById('bidInput').value = this.currentBid / 1000000;
       this.showValidationMessage(
         `Bid capped to ${this.formatCurrency(maxSpendable)} (reserving for ${budgetInfo.playersNeeded - 1} more players)`
       );
@@ -673,7 +673,7 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
       }
     }
 
-    document.getElementById('bidInput').value = this.currentBid;
+    document.getElementById('bidInput').value = this.currentBid / 1000000;
     this.sendBidUpdate();
   }
 
@@ -742,14 +742,8 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
     // Remove currency symbols and spaces
     let cleaned = value.replace(/[€$£\s,]/g, '');
 
-    // Handle M/K suffixes
-    if (cleaned.toLowerCase().endsWith('m')) {
-      return parseFloat(cleaned) * 1000000;
-    } else if (cleaned.toLowerCase().endsWith('k')) {
-      return parseFloat(cleaned) * 1000;
-    }
-
-    return parseInt(cleaned) || 0;
+    // Input is always in millions, so multiply by 1,000,000
+    return (parseFloat(cleaned) || 0) * 1000000;
   }
 
 sendBidUpdate() {

@@ -1147,7 +1147,9 @@ generateTeamViews() {
 
   updateHeader() {
     this.elements.tournamentName.textContent = this.config.tournamentName;
-    this.elements.welcomeTitle.textContent = this.config.tournamentName;
+    if (this.elements.welcomeTitle) {
+      this.elements.welcomeTitle.textContent = this.config.tournamentName;
+    }
 
     const soldCount = this.players.filter(p => p.status === 'sold').length;
     this.elements.playersSold.textContent = `${soldCount}/${this.players.length}`;

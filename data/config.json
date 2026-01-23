@@ -3,10 +3,10 @@
   "totalBudget": 100000000,
   "currency": "€",
   "currencySymbol": "€",
-  "bidIncrements": [1000000, 5000000, 10000000, 20000000],
+  "bidIncrements": [1000000, 2000000, 5000000, 10000000],
   "defaultBidIncrement": 1000000,
   "defaultBasePrice": 5000000,
-  "maxBidPerPlayer": 70000000,
+  "maxBidPerPlayer": 50000000,
   "basePrices": {
     "GK": 5000000,
     "DEF": 5000000,

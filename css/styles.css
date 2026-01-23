@@ -8,54 +8,65 @@
    ============================================ */
 
 :root {
-  /* === PRIMARY COLORS === */
-  --primary-color: #37003c;           /* Deep purple - main brand color */
-  --primary-light: #5a0063;           /* Lighter purple for hover states */
-  --primary-dark: #1a001e;            /* Darker purple for shadows */
+  /* === PRIMARY COLORS - PREMIER LEAGUE INSPIRED === */
+  --primary-color: #3d195b;           /* Deep purple - PL brand color */
+  --primary-light: #5a2d82;           /* Lighter purple for hover states */
+  --primary-dark: #1a0a2e;            /* Darker purple for shadows */
 
-  /* === ACCENT COLORS === */
-  --accent-color: #00ff85;            /* Neon green - highlights, buttons */
-  --accent-secondary: #e90052;        /* Pink/magenta - secondary accent */
-  --accent-tertiary: #04f5ff;         /* Cyan - tertiary accent */
+  /* === ACCENT COLORS - PL CYAN TO MAGENTA GRADIENT === */
+  --accent-color: #00f0ff;            /* Electric cyan - primary accent */
+  --accent-secondary: #e90052;        /* PL magenta/pink */
+  --accent-tertiary: #04f5ff;         /* Bright cyan */
+  --accent-gold: #ffd700;             /* Gold for special highlights */
+  --accent-purple: #8b5cf6;           /* Violet purple accent */
 
-  /* === BACKGROUND COLORS === */
-  --bg-primary: #1a1a2e;              /* Main background */
-  --bg-secondary: #16213e;            /* Card backgrounds */
-  --bg-tertiary: #0f0f1a;             /* Darker sections */
-  --bg-overlay: rgba(0, 0, 0, 0.85);  /* Overlay for modals */
+  /* === GRADIENT ACCENTS - THE PL SIGNATURE === */
+  --gradient-pl: linear-gradient(90deg, #00f0ff 0%, #8b5cf6 50%, #e90052 100%);
+  --gradient-cyan-magenta: linear-gradient(90deg, #00f0ff 0%, #e90052 100%);
+  --gradient-energy: linear-gradient(90deg, #00f0ff 0%, #00ff87 50%, #00f0ff 100%);
+  --gradient-fire: linear-gradient(90deg, #ff6b35 0%, #e90052 100%);
+
+  /* === BACKGROUND COLORS - RICH GRADIENTS === */
+  --bg-primary: #0a0014;              /* Deep purple-black */
+  --bg-secondary: #140028;            /* Rich purple card backgrounds */
+  --bg-tertiary: #080010;             /* Darkest sections */
+  --bg-overlay: rgba(10, 0, 20, 0.95);  /* Purple-tinted overlay */
+  --bg-gradient-main: linear-gradient(135deg, #0a0014 0%, #1a0a3e 50%, #0a0014 100%);
+  --bg-gradient-accent: linear-gradient(135deg, #3d195b 0%, #e90052 100%);
+  --bg-gradient-energy: linear-gradient(90deg, #00f0ff 0%, #00ff87 50%, #00f0ff 100%);
 
   /* === TEXT COLORS === */
   --text-primary: #ffffff;            /* Main text */
-  --text-secondary: #b8b8b8;          /* Secondary text */
-  --text-muted: #666666;              /* Muted/disabled text */
-  --text-dark: #1a1a2e;               /* Text on light backgrounds */
+  --text-secondary: #b8a8d8;          /* Purple-tinted secondary text */
+  --text-muted: #6a5a7a;              /* Muted/disabled text */
+  --text-dark: #0a0014;               /* Text on light backgrounds */
 
   /* === PLAYER CARD COLORS === */
-  --card-gold: #ffd700;               /* Gold card background */
-  --card-silver: #c0c0c0;             /* Silver card background */
-  --card-bronze: #cd7f32;             /* Bronze card background */
+  --card-gold: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  --card-silver: linear-gradient(135deg, #e8e8e8 0%, #b8b8b8 100%);
+  --card-bronze: linear-gradient(135deg, #cd7f32 0%, #a85f22 100%);
   --card-default: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
   /* === STATUS COLORS === */
-  --success-color: #00ff85;           /* Success/sold */
-  --warning-color: #ffd700;           /* Warning/bidding */
-  --error-color: #ff4757;             /* Error/unsold */
-  --info-color: #04f5ff;              /* Information */
+  --success-color: #00ff87;           /* Success/sold */
+  --warning-color: #ffcc00;           /* Warning/bidding */
+  --error-color: #ff4466;             /* Error/unsold */
+  --info-color: #00f0ff;              /* Information */
 
-  /* === CATEGORY COLORS === */
-  --cat-gk: #ff9f43;                  /* Goalkeeper - Orange */
-  --cat-def: #00d2d3;                 /* Defender - Cyan */
-  --cat-mid: #00ff85;                 /* Midfielder - Green */
-  --cat-att: #ff6b6b;                 /* Attacker - Red */
+  /* === CATEGORY COLORS - MORE VIBRANT === */
+  --cat-gk: #ff9500;                  /* Goalkeeper - Orange */
+  --cat-def: #00f0ff;                 /* Defender - Electric Cyan */
+  --cat-mid: #00ff87;                 /* Midfielder - Electric Green */
+  --cat-att: #e90052;                 /* Attacker - PL Magenta */
 
   /* === TEAM COLORS (defaults - overridden by manager data) === */
   --team1-primary: #e90052;
-  --team1-secondary: #04f5ff;
-  --team2-primary: #00ff85;
-  --team2-secondary: #38003c;
+  --team1-secondary: #00f0ff;
+  --team2-primary: #00ff87;
+  --team2-secondary: #3d195b;
   --team3-primary: #ffd700;
-  --team3-secondary: #1a1a2e;
-  --team4-primary: #6c5ce7;
+  --team3-secondary: #1a0a2e;
+  --team4-primary: #8b5cf6;
   --team4-secondary: #ffffff;
 
   /* === FONTS === */
@@ -156,10 +167,7 @@ body {
   font-family: var(--font-display);
   font-size: 2.5rem;
   letter-spacing: 2px;
-  background: linear-gradient(90deg, var(--accent-color), var(--accent-tertiary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-color);
 }
 
 .header-info {
@@ -269,17 +277,13 @@ body {
 .teaser-title {
   font-family: var(--font-display);
   font-size: 6rem;
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-tertiary) 50%, var(--accent-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-color);
   margin-bottom: var(--spacing-lg);
-  animation: titlePulse 3s ease-in-out infinite;
 }
 
 @keyframes titlePulse {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.02); filter: brightness(1.1); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
 }
 
 .teaser-view .teaser-funfact {
@@ -316,7 +320,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #0a0a12 0%, #1a0a1a 50%, #0a0a12 100%);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--primary-dark) 50%, var(--bg-primary) 100%);
   padding: 3vh 4vw;
   gap: 4vw;
 }
@@ -333,8 +337,8 @@ body {
 }
 
 @keyframes teaserBgPulse {
-  0%, 100% { opacity: 0.25; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.05); }
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.3; }
 }
 
 /* Floating Particles */
@@ -351,8 +355,9 @@ body {
 }
 
 @keyframes particleFloat {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100px); }
+  0% { opacity: 0.3; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.3; }
 }
 
 /* Mystery Card - Left Side */
@@ -369,8 +374,8 @@ body {
 }
 
 @keyframes mysteryCardFloat {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-15px) rotate(2deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .mystery-silhouette {
@@ -401,8 +406,8 @@ body {
 }
 
 @keyframes glowPulse {
-  0%, 100% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.3); opacity: 0.7; }
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
 }
 
 .mystery-question {
@@ -415,8 +420,8 @@ body {
 }
 
 @keyframes questionPulse {
-  0%, 100% { transform: scale(1); opacity: 0.2; }
-  50% { transform: scale(1.1); opacity: 0.35; }
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.3; }
 }
 
 .mystery-position-badge {
@@ -436,7 +441,7 @@ body {
 
 @keyframes badgeBounce {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-5px); }
 }
 
 /* Main Content - Right Side */
@@ -536,8 +541,8 @@ body {
 }
 
 @keyframes funfactGlow {
-  0%, 100% { box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px var(--teaser-color, #e90052)30; }
-  50% { box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 80px var(--teaser-color, #e90052)50; }
+  0%, 100% { box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  50% { box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
 }
 
 .funfact-label {
@@ -960,14 +965,17 @@ body {
 
 .auction-view {
   display: grid;
-  grid-template-columns: 380px 1fr 400px;
-  gap: var(--spacing-xl);
-  padding: var(--spacing-xl) var(--spacing-xxl);
+  grid-template-columns: 28% 1fr 28%;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
   background: var(--bg-primary);
-  align-items: center;
-  height: 100%;
+  align-items: stretch;
+  height: calc(100vh - 80px);
+  width: 100vw;
+  overflow: hidden;
 }
 
+/* Left: Player Card Section */
 .auction-player-section {
   display: flex;
   flex-direction: column;
@@ -975,24 +983,24 @@ body {
   justify-content: center;
 }
 
+/* Center: Bidding Section */
 .auction-bidding-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--spacing-xl);
+  align-items: stretch;
+  gap: var(--spacing-lg);
 }
 
 /* Managers Panel (Right Side) */
 .auction-managers-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-xl);
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
   background: var(--bg-secondary);
   border-radius: var(--border-radius-lg);
   border: 2px solid rgba(255, 255, 255, 0.1);
-  height: fit-content;
-  max-height: 90vh;
   overflow-y: auto;
 }
 
@@ -1004,27 +1012,34 @@ body {
   text-align: center;
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .managers-panel-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
 .manager-panel-card {
-  padding: var(--spacing-lg);
-  background: var(--bg-tertiary);
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, rgba(61, 25, 91, 0.5) 0%, rgba(26, 10, 62, 0.7) 100%);
   border-radius: var(--border-radius);
-  border-left: 5px solid transparent;
-  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.manager-panel-card:hover {
+  border-color: rgba(255, 40, 130, 0.5);
 }
 
 .manager-panel-card.active-bidder {
-  background: rgba(0, 255, 133, 0.1);
-  border-left-color: var(--accent-color);
-  box-shadow: 0 0 20px rgba(0, 255, 133, 0.2);
-  transform: scale(1.02);
+  background: linear-gradient(135deg, rgba(0, 255, 135, 0.15) 0%, rgba(4, 245, 255, 0.08) 100%);
+  border-color: var(--accent-color);
 }
 
 .manager-panel-header {
@@ -1035,16 +1050,20 @@ body {
 }
 
 .manager-panel-photo {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--text-muted);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.manager-panel-card:hover .manager-panel-photo {
+  border-color: var(--accent-secondary);
 }
 
 .manager-panel-card.active-bidder .manager-panel-photo {
   border-color: var(--accent-color);
-  box-shadow: 0 0 10px var(--accent-color);
 }
 
 .manager-panel-info {
@@ -1055,38 +1074,42 @@ body {
   font-weight: 700;
   font-size: 1rem;
   color: var(--text-primary);
+  transition: color 0.3s;
 }
 
 .manager-panel-team {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: var(--text-secondary) !important;
 }
 
 .manager-panel-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xs);
+  gap: 6px;
   margin-top: var(--spacing-sm);
 }
 
 .manager-stat {
   text-align: center;
-  padding: var(--spacing-xs);
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: var(--border-radius-sm);
+  padding: 8px 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .manager-stat-label {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  margin-bottom: 2px;
 }
 
 .manager-stat-value {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--accent-color);
 }
 
@@ -1104,11 +1127,11 @@ body {
 
 .manager-panel-bidding-tag {
   display: none;
-  font-size: 0.65rem;
-  padding: 2px 8px;
-  background: var(--accent-color);
+  font-size: 0.6rem;
+  padding: 3px 10px;
+  background: var(--bg-gradient-energy);
   color: var(--text-dark);
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -1120,40 +1143,37 @@ body {
 
 .current-bid-display {
   text-align: center;
-  padding: var(--spacing-xxl);
-  background: var(--bg-secondary);
+  padding: var(--spacing-xl);
+  background: linear-gradient(180deg, rgba(61, 25, 91, 0.5) 0%, rgba(10, 0, 20, 0.9) 100%);
   border-radius: var(--border-radius-lg);
   border: 3px solid var(--accent-color);
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
+  width: 100%;
 }
 
 .bid-label {
-  font-size: 1.5rem;
-  color: var(--text-secondary);
+  font-size: 1.2rem;
+  color: var(--accent-color);
   text-transform: uppercase;
   letter-spacing: 4px;
   margin-bottom: var(--spacing-md);
 }
 
-.bid-amount {
-  font-family: var(--font-display);
-  font-size: 6rem;
-  color: var(--accent-color);
-  line-height: 1;
-  animation: bidPulse 1s ease infinite;
-}
-
 .bid-history {
   padding: var(--spacing-lg);
-  background: var(--bg-secondary);
+  background: linear-gradient(135deg, rgba(61, 25, 91, 0.4) 0%, rgba(10, 0, 20, 0.7) 100%);
   border-radius: var(--border-radius);
   max-height: 200px;
   overflow-y: auto;
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  border-top: 2px solid var(--accent-color);
+  position: relative;
+  z-index: 10;
 }
 
 .bid-history-title {
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--accent-color);
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: var(--spacing-md);
@@ -1163,7 +1183,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: var(--spacing-sm);
-  border-bottom: 1px solid var(--bg-tertiary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .bid-history-item:last-child {
@@ -1176,7 +1196,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  background: linear-gradient(135deg, rgba(61, 25, 91, 0.5) 0%, rgba(10, 0, 20, 0.8) 100%);
   border-radius: var(--border-radius-lg);
   border: 2px solid var(--accent-secondary);
   box-shadow: 0 0 20px rgba(233, 0, 82, 0.2);
@@ -1553,7 +1573,7 @@ body {
   grid-template-rows: repeat(2, 1fr);
   gap: 8px;
   padding: 10px;
-  background: linear-gradient(135deg, #0b0f19 0%, #1a1a2e 100%);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--primary-dark) 50%, var(--bg-primary) 100%);
   z-index: 50;
   overflow: hidden;
 }
@@ -1562,21 +1582,28 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: linear-gradient(180deg, rgba(61, 25, 91, 0.3) 0%, rgba(10, 0, 20, 0.8) 100%);
   border-radius: 16px;
   overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.1);
-  transition: border-color 0.3s;
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.master-team-card:hover {
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
 }
 
 /* Manager Header - More Prominent */
 .master-team-header {
   padding: 15px 20px;
-  background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
+  background: linear-gradient(135deg, rgba(61, 25, 91, 0.5) 0%, rgba(20, 0, 40, 0.7) 100%);
   display: flex;
   align-items: center;
   gap: 15px;
   border-bottom: 3px solid;
+  position: relative;
 }
 
 .master-manager-photo {
@@ -1623,6 +1650,7 @@ body {
 .master-budget-amount {
   font-family: var(--font-display);
   font-size: 1.4rem;
+  color: var(--accent-color);
 }
 
 /* Players Grid - 7 slots in optimized layout */
@@ -1733,6 +1761,7 @@ body {
   font-family: var(--font-display);
   font-size: 1rem;
   flex-shrink: 0;
+  color: var(--accent-color);
 }
 
 /* ============================================
@@ -1744,6 +1773,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
+  background: var(--bg-primary);
 }
 
 .budget-title {
@@ -1818,6 +1848,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-xl);
+  background: var(--bg-primary);
 }
 
 .soldlist-section {
@@ -2260,8 +2291,8 @@ body {
 }
 
 @keyframes bidPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
 }
 
 @keyframes soldBounce {
@@ -2450,25 +2481,25 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  pointer-events: none; /* Let clicks pass through */
+  pointer-events: none;
 }
 
 .bid-bubble {
-  background: rgba(0, 0, 0, 0.9);
+  background: linear-gradient(135deg, rgba(61, 25, 91, 0.95) 0%, rgba(10, 0, 20, 0.98) 100%);
   border: 4px solid var(--accent-color);
   border-radius: 30px;
   padding: 30px 60px;
   display: flex;
   align-items: center;
   gap: 30px;
-  box-shadow: 0 0 50px var(--accent-color);
+  box-shadow: 0 0 60px rgba(0, 240, 255, 0.4);
   transform: scale(0);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .bid-animation-overlay.active .bid-bubble {
-  transform: scale(1.2);
+  transform: scale(1);
   opacity: 1;
 }
 
@@ -2478,6 +2509,7 @@ body {
   border-radius: 50%;
   border: 4px solid #fff;
   object-fit: cover;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
 }
 
 .bid-anim-content {
@@ -2496,7 +2528,7 @@ body {
   font-size: 5rem;
   color: var(--accent-color);
   line-height: 1;
-  text-shadow: 0 0 20px rgba(0, 255, 133, 0.5);
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
 }
 
 .bid-anim-name {
@@ -2506,13 +2538,14 @@ body {
 
 /* === TRANSFER VIEW (Hero Screen) === */
 .transfer-view {
-  display: flex; /* Hidden by default via class .view */
+  display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   overflow: hidden;
   z-index: 100;
+  background: var(--bg-primary);
 }
 
 .transfer-bg {
@@ -2561,8 +2594,8 @@ body {
   height: 250px;
   border-radius: 50%;
   object-fit: cover;
-  border: 6px solid #fff;
-  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  border: 6px solid var(--accent-color);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
   animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

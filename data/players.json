@@ -11,7 +11,7 @@
         "passing": 75,
         "dribbling": 70,
         "defense": 85,
-        "physical": 65
+        "physical": 90
       },
       "funFact": "AI Champ of the week",
       "oneWordTrait": "Beast",
@@ -27,11 +27,11 @@
       "category": "ATT",
       "attributes": {
         "pace": 90,
-        "shooting": 88,
+        "shooting": "Don't try to intercept",
         "passing": 75,
         "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "defense": 75,
+        "physical": "tagda"
       },
       "funFact": "Mr. Secret Santa",
       "oneWordTrait": "BOB",
@@ -47,11 +47,11 @@
       "category": "MID",
       "attributes": {
         "pace": 90,
-        "shooting": 88,
+        "shooting": 95,
         "passing": 75,
         "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "defense": "ice",
+        "physical": "teddy"
       },
       "funFact": "Football Genie, Tap to football",
       "oneWordTrait": "MVP",
@@ -66,14 +66,14 @@
       "photo": "assets/players/Sumedh Zope.png",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 60,
+        "shooting": "De bruyne",
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 80,
         "defense": 65,
-        "physical": 75
+        "physical": 90
       },
-      "funFact": "Likes to come to office for Atte ka halwa",
+      "funFact": "Likes Atte ka halwa",
       "oneWordTrait": "ZOPED",
       "basePrice": 5000000,
       "status": "unsold",
@@ -86,12 +86,12 @@
       "photo": "assets/players/Shashank.png",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 85,
+        "shooting": 85,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 85,
+        "defense": "hein?",
+        "physical": 80
       },
       "funFact": "All RCA for Travel MBR",
       "oneWordTrait": "Bandwidth",
@@ -106,12 +106,12 @@
       "photo": "assets/players/Pratham P.jpeg",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
+        "pace": "1000",
         "shooting": 88,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": "messi",
         "defense": 65,
-        "physical": 75
+        "physical": 85
       },
       "funFact": "Brings kit to office everyday but never plays",
       "oneWordTrait": "Columbia jacket",
@@ -126,12 +126,12 @@
       "photo": "assets/players/Gahan.jpg",
       "category": "DEF",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 70,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 70,
         "defense": 65,
-        "physical": 75
+        "physical": 80
       },
       "funFact": "He is asleep by night",
       "oneWordTrait": "Asleep by night",
@@ -149,9 +149,9 @@
         "pace": 90,
         "shooting": 88,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 100,
         "defense": 65,
-        "physical": 75
+        "physical": 85
       },
       "funFact": "UGC for football",
       "oneWordTrait": "UGC",
@@ -166,10 +166,10 @@
       "photo": "assets/players/Sandipan Bala.png",
       "category": "GK",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 75,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 75,
         "defense": 65,
         "physical": 75
       },
@@ -187,11 +187,11 @@
       "category": "GK",
       "attributes": {
         "pace": 90,
-        "shooting": 88,
+        "shooting": 70,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 80,
+        "defense": 70,
+        "physical": 80
       },
       "funFact": "Forrest gump of Scapia",
       "oneWordTrait": "Forrest",
@@ -206,12 +206,12 @@
       "photo": "assets/players/Sandeep Xavier.jpeg",
       "category": "DEF",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 85,
+        "shooting": 70,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 70,
+        "defense": 75,
+        "physical": 80
       },
       "funFact": "Joins at 8 PM for 6 to 7:30 game",
       "oneWordTrait": "LATE SANDY",
@@ -226,12 +226,12 @@
       "photo": "assets/players/Anurag Kumar Singh.jpg",
       "category": "MID",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 85,
+        "shooting": 80,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 70,
         "defense": 65,
-        "physical": 75
+        "physical": 85
       },
       "funFact": "Abdul aa gya, I cannot play football",
       "oneWordTrait": "ABDUL IS NOT HERE",
@@ -246,12 +246,12 @@
       "photo": "assets/players/Abdul Rehman.png",
       "category": "MID",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": "Bolt",
+        "shooting": 85,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 85,
+        "defense": "is his middle name",
+        "physical": 85
       },
       "funFact": "Spitha mei add kar denge",
       "oneWordTrait": "Spitha",
@@ -266,12 +266,12 @@
       "photo": "assets/players/Aditya Thakur.jpeg",
       "category": "DEF",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 75,
+        "shooting": 80,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 70,
         "defense": 65,
-        "physical": 75
+        "physical": 90
       },
       "funFact": "Most appearences on FlutterCon Office",
       "oneWordTrait": "Fluttercon",
@@ -286,12 +286,12 @@
       "photo": "assets/players/Manish Pandey.jpg",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 70,
+        "shooting": 55,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 60,
+        "defense": "ice",
+        "physical": 50
       },
       "funFact": "Takes only 1 year to take a shot",
       "oneWordTrait": "This needs code",
@@ -306,15 +306,15 @@
       "photo": "assets/players/Kushal.png",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 90,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 75,
         "defense": 65,
-        "physical": 75
+        "physical": 80
       },
-      "funFact": "Brings kit to office everyday but never plays",
-      "oneWordTrait": "TBD",
+      "funFact": "Mystery man even Unni doesn't know",
+      "oneWordTrait": "Grasscut shooter",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,
@@ -326,11 +326,11 @@
       "photo": "assets/players/Durgesh Suthar.png",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 75,
+        "shooting": 70,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
+        "dribbling": 70,
+        "defense": 100,
         "physical": 75
       },
       "funFact": "Angry young man",
@@ -346,12 +346,12 @@
       "photo": "assets/players/Bharath Kumar.jpg",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 70,
+        "shooting": 70,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 60,
+        "defense": 0,
+        "physical": 80
       },
       "funFact": "Faster than a tracer bullet",
       "oneWordTrait": "SPEEDSTER",
@@ -366,15 +366,15 @@
       "photo": "assets/players/Jalaj Varshney.png",
       "category": "DEF",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 70,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
+        "dribbling": 60,
+        "defense": 60,
         "physical": 75
       },
-      "funFact": "",
-      "oneWordTrait": "",
+      "funFact": "Only chelsea fan apart from Sarjan",
+      "oneWordTrait": "Joao Pedro",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,
@@ -387,9 +387,9 @@
       "category": "ATT",
       "attributes": {
         "pace": 90,
-        "shooting": 88,
+        "shooting": 85,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 85,
         "defense": 65,
         "physical": 75
       },
@@ -406,15 +406,15 @@
       "photo": "assets/players/Navdeep.jpg",
       "category": "DEF",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 75,
+        "shooting": 85,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 75,
         "defense": 65,
         "physical": 75
       },
       "funFact": "Top goalie and a striker",
-      "oneWordTrait": "",
+      "oneWordTrait": "Versatile",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,
@@ -426,12 +426,12 @@
       "photo": "assets/players/Dhrouv Pujari.jpeg",
       "category": "MID",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 75,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 70,
         "defense": 65,
-        "physical": 75
+        "physical": "malnourished"
       },
       "funFact": "Aunt stopped him from playing football",
       "oneWordTrait": "WORDPLAY",
@@ -446,15 +446,15 @@
       "photo": "assets/players/Rajendra Ranka.jpg",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 70,
+        "shooting": 65,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 70,
         "defense": 65,
-        "physical": 75
+        "physical": "baby"
       },
-      "funFact": "",
-      "oneWordTrait": "",
+      "funFact": "Working with SRK to Working with Mani",
+      "oneWordTrait": "Red chilly",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,
@@ -466,15 +466,15 @@
       "photo": "assets/players/Rishab Khanna.png",
       "category": "ATT",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 80,
         "passing": 75,
-        "dribbling": 92,
+        "dribbling": 75,
         "defense": 65,
-        "physical": 75
+        "physical": 80
       },
       "funFact": "Intern who says he plays football",
-      "oneWordTrait": "",
+      "oneWordTrait": "Intern",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,
@@ -486,15 +486,15 @@
       "photo": "assets/players/Umair.jpg",
       "category": "MID",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 85,
+        "shooting": 80,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 85,
+        "defense": 90,
+        "physical": 85
       },
       "funFact": "Spends money on spreadsheets",
-      "oneWordTrait": "",
+      "oneWordTrait": "Excel",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,
@@ -506,12 +506,12 @@
       "photo": "assets/players/Raghu.jpg",
       "category": "DEF",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 80,
+        "shooting": 60,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": "-10",
+        "defense": 85,
+        "physical": "Ramos"
       },
       "funFact": "Biryani",
       "oneWordTrait": "Raghu",
@@ -526,15 +526,35 @@
       "photo": "assets/players/Sukhpal.jpg",
       "category": "MID",
       "attributes": {
-        "pace": 90,
-        "shooting": 88,
+        "pace": 85,
+        "shooting": 90,
         "passing": 75,
-        "dribbling": 92,
-        "defense": 65,
-        "physical": 75
+        "dribbling": 80,
+        "defense": "Pepe",
+        "physical": 80
       },
       "funFact": "He represents Bank in Scapia",
       "oneWordTrait": "CEO Fed bank",
+      "basePrice": 5000000,
+      "status": "unsold",
+      "soldTo": null,
+      "soldPrice": null
+    },
+    {
+      "id": 28,
+      "name": "Mayank",
+      "photo": "assets/players/Mayank.jpeg",
+      "category": "MID",
+      "attributes": {
+        "pace": 70,
+        "shooting": 65,
+        "passing": 75,
+        "dribbling": 70,
+        "defense": 65,
+        "physical": 85
+      },
+      "funFact": "Earned 100K coins by spending on Physio",
+      "oneWordTrait": "Angel investor for Physio",
       "basePrice": 5000000,
       "status": "unsold",
       "soldTo": null,

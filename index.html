@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Football Auction - Presentation View</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <!-- Canvas Confetti Library for rich celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   </head>
   <body>
     <div class="app-container">
@@ -40,15 +42,81 @@
           </div>
         </div>
 
-        <!-- Teaser View (Fun Fact) -->
-        <div class="view teaser-view" id="teaserView">
-          <div class="teaser-container">
-            <div class="teaser-label">Who is this player?</div>
-            <h1 class="teaser-title">Mystery Player</h1>
-            <p class="teaser-funfact" id="teaserFunFact">Loading fun fact...</p>
-            <span class="teaser-category" id="teaserCategory">ATT</span>
-            <p class="teaser-hint">Press SPACE to reveal the player</p>
+        <!-- Teaser View (Fun Fact) - DRAMATIC MYSTERY REVEAL -->
+        <div class="view teaser-view-new" id="teaserView">
+          <!-- Animated Background -->
+          <div class="teaser-bg" id="teaserBg"></div>
+          <div class="teaser-particles" id="teaserParticles"></div>
+
+          <!-- Mystery Silhouette -->
+          <div class="teaser-mystery-card" id="teaserMysteryCard">
+            <div class="mystery-silhouette">
+              <div class="mystery-glow" id="mysteryGlow"></div>
+              <div class="mystery-question">?</div>
+            </div>
+            <div class="mystery-position-badge" id="teaserPositionBadge">
+              <span id="teaserCategory">ATT</span>
+            </div>
           </div>
+
+          <!-- Main Content -->
+          <div class="teaser-content">
+            <!-- Top: Category & Price Hint -->
+            <div class="teaser-top-bar">
+              <div class="teaser-position-label" id="teaserPositionLabel">
+                <span class="position-icon" id="teaserPositionIcon">⚔️</span>
+                <span id="teaserPositionName">ATTACKER</span>
+              </div>
+              <div class="teaser-price-hint">
+                <span class="price-label">BASE PRICE</span>
+                <span class="price-value" id="teaserBasePrice">€10M</span>
+              </div>
+            </div>
+
+            <!-- Center: The Big Question -->
+            <div class="teaser-question-section">
+              <div class="teaser-eyebrow">NEXT UP FOR AUCTION</div>
+              <h1 class="teaser-headline">WHO IS THIS<br/>MYSTERY PLAYER?</h1>
+            </div>
+
+            <!-- The Fun Fact - STAR OF THE SHOW -->
+            <div class="teaser-funfact-container">
+              <div class="funfact-quote-mark">"</div>
+              <p class="teaser-funfact-text" id="teaserFunFact">Loading the clue...</p>
+              <div class="funfact-quote-mark end">"</div>
+            </div>
+
+            <!-- Stat Hints (blurred) -->
+            <div class="teaser-stat-hints" id="teaserStatHints">
+              <div class="stat-hint" id="hintPace">
+                <div class="stat-hint-bar"><div class="stat-hint-fill" id="hintPaceFill"></div></div>
+                <span>PACE</span>
+              </div>
+              <div class="stat-hint" id="hintPower">
+                <div class="stat-hint-bar"><div class="stat-hint-fill" id="hintPowerFill"></div></div>
+                <span>POWER</span>
+              </div>
+              <div class="stat-hint" id="hintSkill">
+                <div class="stat-hint-bar"><div class="stat-hint-fill" id="hintSkillFill"></div></div>
+                <span>SKILL</span>
+              </div>
+            </div>
+
+            <!-- Bottom: Call to action -->
+            <div class="teaser-cta">
+              <div class="teaser-cta-text">CAN YOU GUESS WHO?</div>
+              <div class="teaser-cta-hint">
+                <span class="pulse-dot"></span>
+                REVEAL INCOMING
+              </div>
+            </div>
+          </div>
+
+          <!-- Corner decorations -->
+          <div class="teaser-corner top-left"></div>
+          <div class="teaser-corner top-right"></div>
+          <div class="teaser-corner bottom-left"></div>
+          <div class="teaser-corner bottom-right"></div>
         </div>
 
         <!-- Reveal View (Player Card) -->
@@ -125,6 +193,7 @@
         </div>
 
         <!-- Auction View (Bidding) -->
+
         <div class="view auction-view" id="auctionView">
           <div class="auction-player-section">
             <div class="player-card-container" style="transform: scale(0.85)">
@@ -209,7 +278,35 @@
             </div>
           </div>
         </div>
+        <div class="view transfer-view" id="transferView">
+          <div class="transfer-bg" id="transferBg"></div>
 
+          <div class="transfer-content">
+            <div class="transfer-header">OFFICIAL ANNOUNCEMENT</div>
+
+            <div class="transfer-cards">
+              <div class="transfer-card-container manager-side">
+                <img id="transferManagerPhoto" src="" class="transfer-photo" />
+                <div class="transfer-label" id="transferManagerName">
+                  Manager
+                </div>
+              </div>
+
+              <div class="transfer-deal-info">
+                <div class="transfer-icon">🤝</div>
+                <div class="transfer-price" id="transferPrice">€15M</div>
+                <div class="transfer-status">SIGNED</div>
+              </div>
+
+              <div class="transfer-card-container player-side">
+                <img id="transferPlayerPhoto" src="" class="transfer-photo" />
+                <div class="transfer-label" id="transferPlayerName">Player</div>
+              </div>
+            </div>
+
+            <div class="transfer-footer" id="transferTeamName">TEAM NAME</div>
+          </div>
+        </div>
         <!-- Master Overview (All Teams) -->
         <div class="view master-view" id="masterView">
           <!-- Team cards generated dynamically -->
@@ -273,16 +370,16 @@
         </div>
       </div>
     </div>
-<div id="bidAnimation" class="bid-animation-overlay hidden">
-    <div class="bid-bubble">
-        <img id="bidAnimPhoto" src="" class="bid-anim-photo">
+    <div id="bidAnimation" class="bid-animation-overlay hidden">
+      <div class="bid-bubble">
+        <img id="bidAnimPhoto" src="" class="bid-anim-photo" />
         <div class="bid-anim-content">
-            <div class="bid-anim-label">NEW BID!</div>
-            <div id="bidAnimAmount" class="bid-anim-amount">€10M</div>
-            <div id="bidAnimName" class="bid-anim-name">Manager Name</div>
+          <div class="bid-anim-label">NEW BID!</div>
+          <div id="bidAnimAmount" class="bid-anim-amount">€10M</div>
+          <div id="bidAnimName" class="bid-anim-name">Manager Name</div>
         </div>
+      </div>
     </div>
-  </div>
 
     <script src="js/confetti.js"></script>
     <script src="js/sync.js"></script>

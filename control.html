@@ -10,12 +10,163 @@
       overflow: auto;
     }
     .control-panel {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
+    }
+    /* Quick Action Bar */
+    .quick-actions {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary-color));
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 100;
+      border-bottom: 2px solid var(--accent-color);
+    }
+    .quick-actions-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin-right: 5px;
+    }
+    .quick-manager-btn {
+      padding: 8px 20px;
+      background: var(--bg-tertiary);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+      color: var(--text-primary);
+    }
+    .quick-manager-btn:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+    .quick-manager-btn.selected {
+      border-color: var(--accent-color);
+      background: var(--accent-color);
+      color: var(--text-dark);
+    }
+    .quick-manager-btn .kbd {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .quick-manager-btn.selected .kbd {
+      background: rgba(0,0,0,0.2);
+    }
+    .quick-view-btns {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .quick-view-btn {
+      padding: 8px 15px;
+      background: var(--bg-tertiary);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      transition: all 0.15s;
+    }
+    .quick-view-btn:hover {
+      background: var(--accent-color);
+      color: var(--text-dark);
+    }
+    .quick-view-btn .kbd {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-left: 5px;
+    }
+    /* Keyboard Hints Panel */
+    .keyboard-help {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: var(--bg-secondary);
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      z-index: 50;
+      border: 1px solid rgba(255,255,255,0.1);
+      max-width: 280px;
+    }
+    .keyboard-help-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--accent-color);
+    }
+    .keyboard-help-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .keyboard-help-row .kbd {
+      background: var(--bg-tertiary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+    /* Adjust main content for fixed header */
+    .control-header {
+      margin-top: 60px;
     }
   </style>
 </head>
 <body>
+  <!-- Quick Action Bar (Fixed at top) -->
+  <div class="quick-actions">
+    <span class="quick-actions-label">Quick Sell:</span>
+    <button class="quick-manager-btn" data-manager-id="1" onclick="auctionControl.quickSelectManager(1)">
+      <span class="kbd">Q</span>
+      <span id="quickManager1">Manager 1</span>
+    </button>
+    <button class="quick-manager-btn" data-manager-id="2" onclick="auctionControl.quickSelectManager(2)">
+      <span class="kbd">W</span>
+      <span id="quickManager2">Manager 2</span>
+    </button>
+    <button class="quick-manager-btn" data-manager-id="3" onclick="auctionControl.quickSelectManager(3)">
+      <span class="kbd">E</span>
+      <span id="quickManager3">Manager 3</span>
+    </button>
+    <button class="quick-manager-btn" data-manager-id="4" onclick="auctionControl.quickSelectManager(4)">
+      <span class="kbd">R</span>
+      <span id="quickManager4">Manager 4</span>
+    </button>
+
+    <div class="quick-view-btns">
+      <button class="quick-view-btn" onclick="auctionControl.changeView('master')">Teams <span class="kbd">M</span></button>
+      <button class="quick-view-btn" onclick="auctionControl.changeView('auction')">Auction <span class="kbd">A</span></button>
+      <button class="quick-view-btn" onclick="auctionControl.changeView('transfer')">Transfer <span class="kbd">T</span></button>
+    </div>
+  </div>
+
+  <!-- Keyboard Help Panel -->
+  <div class="keyboard-help">
+    <div class="keyboard-help-title">Keyboard Shortcuts</div>
+    <div class="keyboard-help-row"><span>Select Manager 1</span> <span class="kbd">Q</span></div>
+    <div class="keyboard-help-row"><span>Select Manager 2</span> <span class="kbd">W</span></div>
+    <div class="keyboard-help-row"><span>Select Manager 3</span> <span class="kbd">E</span></div>
+    <div class="keyboard-help-row"><span>Select Manager 4</span> <span class="kbd">R</span></div>
+    <div class="keyboard-help-row"><span>Confirm Sale</span> <span class="kbd">Enter</span></div>
+    <div class="keyboard-help-row"><span>All Teams View</span> <span class="kbd">M</span></div>
+    <div class="keyboard-help-row"><span>Auction View</span> <span class="kbd">A</span></div>
+    <div class="keyboard-help-row"><span>+500K Bid</span> <span class="kbd">↑</span></div>
+    <div class="keyboard-help-row"><span>-500K Bid</span> <span class="kbd">↓</span></div>
+  </div>
+
   <div class="control-panel">
     <!-- Header -->
     <div class="control-header">

@@ -5,11 +5,12 @@
   "currencySymbol": "€",
   "bidIncrements": [100000, 500000, 1000000, 2000000, 5000000],
   "defaultBidIncrement": 500000,
+  "defaultBasePrice": 5000000,
   "basePrices": {
     "GK": 5000000,
-    "DEF": 8000000,
-    "MID": 10000000,
-    "ATT": 12000000
+    "DEF": 5000000,
+    "MID": 5000000,
+    "ATT": 5000000
   },
 "formation": {
     "type": "1-2-2-2",

@@ -135,6 +135,108 @@ class AuctionControl {
     document.getElementById('lineupTeamSelect').addEventListener('change', (e) => {
       this.renderLineupManagement(parseInt(e.target.value));
     });
+
+    // Global keyboard shortcuts for faster auction control
+    document.addEventListener('keydown', (e) => {
+      // Don't trigger if typing in an input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+        // But allow Enter in bid input to confirm
+        if (e.key === 'Enter' && e.target.id === 'bidInput') {
+          this.updateBidFromInput();
+        }
+        return;
+      }
+
+      // IMPORTANT: Ignore shortcuts when modifier keys are pressed (Ctrl, Alt, Meta/Cmd)
+      // This prevents Ctrl+Shift+R (hard refresh) from triggering manager selection
+      if (e.ctrlKey || e.altKey || e.metaKey) {
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        // Manager selection: Q, W, E, R
+        case 'q':
+          e.preventDefault();
+          this.quickSelectManager(1);
+          break;
+        case 'w':
+          e.preventDefault();
+          this.quickSelectManager(2);
+          break;
+        case 'e':
+          e.preventDefault();
+          this.quickSelectManager(3);
+          break;
+        case 'r':
+          e.preventDefault();
+          this.quickSelectManager(4);
+          break;
+
+        // Confirm sale with Enter
+        case 'enter':
+          e.preventDefault();
+          if (this.currentPlayer && this.selectedManagerId) {
+            this.markSold();
+          }
+          break;
+
+        // Bid adjustments with arrow keys
+        case 'arrowup':
+          e.preventDefault();
+          this.incrementBid(500000); // +500K
+          break;
+        case 'arrowdown':
+          e.preventDefault();
+          this.incrementBid(-500000); // -500K
+          break;
+
+        // Quick view shortcuts
+        case 'm':
+          e.preventDefault();
+          this.changeView('master');
+          break;
+        case 'a':
+          e.preventDefault();
+          this.changeView('auction');
+          break;
+        case 't':
+          e.preventDefault();
+          this.changeView('transfer');
+          break;
+        case 'b':
+          e.preventDefault();
+          this.changeView('budget');
+          break;
+        case 's':
+          e.preventDefault();
+          this.changeView('soldlist');
+          break;
+
+        // Number keys for team views
+        case '1':
+          e.preventDefault();
+          this.changeView('team1');
+          break;
+        case '2':
+          e.preventDefault();
+          this.changeView('team2');
+          break;
+        case '3':
+          e.preventDefault();
+          this.changeView('team3');
+          break;
+        case '4':
+          e.preventDefault();
+          this.changeView('team4');
+          break;
+
+        // Escape to go back to auction
+        case 'escape':
+          e.preventDefault();
+          this.changeView('auction');
+          break;
+      }
+    });
   }
 
   setupSyncListeners() {
@@ -210,6 +312,17 @@ class AuctionControl {
         <div class="manager-btn-budget">${this.formatCurrency(manager.budget)}</div>
       </div>
     `).join('');
+
+    // Also update quick action bar manager names
+    this.managers.forEach((manager, index) => {
+      const quickEl = document.getElementById(`quickManager${index + 1}`);
+      if (quickEl) {
+        quickEl.textContent = `${manager.name} (${this.formatCurrency(manager.budget)})`;
+      }
+    });
+
+    // Update selection state on quick buttons
+    this.updateQuickManagerButtons();
   }
 
   renderLineupTeamSelect() {
@@ -240,7 +353,7 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
     const assignments = new Array(7).fill(null);
     if (manager.players) {
       manager.players.forEach(mp => {
-        if (mp.position !== null && mp.position >= 0 && mp.position < 6) {
+        if (mp.position !== null && mp.position >= 0 && mp.position < 7) {
           const player = teamPlayers.find(p => p.id === mp.id);
           if (player) assignments[mp.position] = player;
         }
@@ -408,10 +521,75 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
 
   selectManager(managerId) {
     this.selectedManagerId = managerId;
+
+    // Validate: If current bid exceeds this manager's budget, cap it
+    if (this.currentPlayer && managerId) {
+      const manager = this.managers.find(m => m.id === managerId);
+      if (manager && this.currentBid > manager.budget) {
+        this.currentBid = manager.budget;
+        document.getElementById('bidInput').value = this.currentBid;
+        this.showValidationMessage(`Bid capped to ${manager.name}'s budget: ${this.formatCurrency(manager.budget)}`);
+        this.sendBidUpdate();
+      }
+    }
+
     this.renderManagerButtons();
+    this.updateQuickManagerButtons();
 
     // Enable sold button if player is selected
     document.getElementById('btnSold').disabled = !this.currentPlayer;
+  }
+
+  /**
+   * Quick select manager via keyboard shortcut and auto-send bid update
+   */
+  quickSelectManager(managerId) {
+    if (!this.currentPlayer) {
+      console.log('No player selected');
+      return;
+    }
+
+    const manager = this.managers.find(m => m.id === managerId);
+    if (!manager) return;
+
+    // Validate: Manager must have enough budget
+    const basePrice = this.currentPlayer.basePrice;
+    if (manager.budget < basePrice) {
+      this.showValidationMessage(`${manager.name} cannot afford base price (${this.formatCurrency(basePrice)})`);
+      return;
+    }
+
+    this.selectedManagerId = managerId;
+
+    // Validate: If current bid exceeds this manager's budget, cap it
+    if (this.currentBid > manager.budget) {
+      this.currentBid = manager.budget;
+      document.getElementById('bidInput').value = this.currentBid;
+      this.showValidationMessage(`Bid capped to ${manager.name}'s budget: ${this.formatCurrency(manager.budget)}`);
+    }
+
+    this.renderManagerButtons();
+    this.updateQuickManagerButtons();
+
+    // Enable sold button
+    document.getElementById('btnSold').disabled = false;
+
+    // Auto-send bid update with manager info
+    this.sendBidUpdate();
+
+    // Visual feedback
+    console.log(`Quick selected manager ${managerId}`);
+  }
+
+  /**
+   * Update quick action bar manager buttons
+   */
+  updateQuickManagerButtons() {
+    // Update selection state
+    document.querySelectorAll('.quick-manager-btn').forEach(btn => {
+      const id = parseInt(btn.dataset.managerId);
+      btn.classList.toggle('selected', id === this.selectedManagerId);
+    });
   }
 
   showTeaser() {
@@ -436,14 +614,71 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
   }
 
   incrementBid(amount) {
-    this.currentBid += amount;
+    if (!this.currentPlayer) return;
+
+    const newBid = this.currentBid + amount;
+    const basePrice = this.currentPlayer.basePrice;
+
+    // Validate: Cannot go below base price
+    if (newBid < basePrice) {
+      this.currentBid = basePrice;
+      this.showValidationMessage(`Cannot bid below base price (${this.formatCurrency(basePrice)})`);
+    }
+    // Validate: Cannot exceed selected manager's budget
+    else if (this.selectedManagerId) {
+      const manager = this.managers.find(m => m.id === this.selectedManagerId);
+      if (manager && newBid > manager.budget) {
+        this.currentBid = manager.budget;
+        this.showValidationMessage(`${manager.name} only has ${this.formatCurrency(manager.budget)} remaining`);
+      } else {
+        this.currentBid = newBid;
+      }
+    } else {
+      this.currentBid = newBid;
+    }
+
     document.getElementById('bidInput').value = this.currentBid;
     this.sendBidUpdate();
   }
 
+  showValidationMessage(message) {
+    // Show a temporary message near the bid input
+    const existingMsg = document.querySelector('.bid-validation-msg');
+    if (existingMsg) existingMsg.remove();
+
+    const msg = document.createElement('div');
+    msg.className = 'bid-validation-msg';
+    msg.style.cssText = 'color: var(--error-color); font-size: 0.85rem; margin-top: 8px; animation: fadeIn 0.2s;';
+    msg.textContent = message;
+
+    const bidInput = document.getElementById('bidInput');
+    bidInput.parentNode.appendChild(msg);
+
+    setTimeout(() => msg.remove(), 3000);
+  }
+
   updateBidFromInput() {
+    if (!this.currentPlayer) return;
+
     const input = document.getElementById('bidInput');
-    const value = this.parseBidInput(input.value);
+    let value = this.parseBidInput(input.value);
+    const basePrice = this.currentPlayer.basePrice;
+
+    // Validate: Cannot go below base price
+    if (value < basePrice) {
+      value = basePrice;
+      this.showValidationMessage(`Cannot bid below base price (${this.formatCurrency(basePrice)})`);
+    }
+
+    // Validate: Cannot exceed selected manager's budget
+    if (this.selectedManagerId) {
+      const manager = this.managers.find(m => m.id === this.selectedManagerId);
+      if (manager && value > manager.budget) {
+        value = manager.budget;
+        this.showValidationMessage(`${manager.name} only has ${this.formatCurrency(manager.budget)} remaining`);
+      }
+    }
+
     if (value > 0) {
       this.currentBid = value;
       input.value = this.currentBid;

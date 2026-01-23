@@ -97,7 +97,8 @@ class AuctionPresentation {
       team3: document.getElementById('teamView3'),
       team4: document.getElementById('teamView4'),
       budget: document.getElementById('budgetView'),
-      soldlist: document.getElementById('soldlistView')
+      soldlist: document.getElementById('soldlistView'),
+      transfer: document.getElementById('transferView')
     };
 
     // Header elements
@@ -296,6 +297,11 @@ class AuctionPresentation {
   // ===============================
 
   showView(viewName) {
+    // If auction view is requested but we just completed a sale, show transfer instead
+    if (viewName === 'auction' && this.auctionPhase === 'sold') {
+      viewName = 'transfer';
+    }
+
     // Hide all views
     Object.values(this.views).forEach(view => {
       if (view) {
@@ -329,6 +335,7 @@ class AuctionPresentation {
       teaser: 'Teaser',
       reveal: 'Reveal',
       auction: 'Auction',
+      transfer: 'Transfer Complete',
       master: 'All Teams',
       team1: 'Team 1',
       team2: 'Team 2',
@@ -378,14 +385,52 @@ class AuctionPresentation {
       return;
     }
 
-    // Update teaser content
-    this.elements.teaserFunFact.textContent = this.currentPlayer.funFact;
-    this.elements.teaserCategory.textContent = this.config.categoryNames[this.currentPlayer.category];
-    this.elements.teaserCategory.className = `teaser-category ${this.currentPlayer.category}`;
+    const player = this.currentPlayer;
+    const category = player.category;
+    const teaserView = this.views.teaser;
+
+    // Set position-based color theme
+    teaserView.classList.remove('pos-GK', 'pos-DEF', 'pos-MID', 'pos-ATT');
+    teaserView.classList.add(`pos-${category}`);
+
+    // Update fun fact (THE STAR)
+    const funFactEl = document.getElementById('teaserFunFact');
+    if (funFactEl) funFactEl.textContent = player.funFact;
+
+    // Update position badge and label
+    const categoryEl = document.getElementById('teaserCategory');
+    if (categoryEl) categoryEl.textContent = category;
+
+    const posNameEl = document.getElementById('teaserPositionName');
+    if (posNameEl) posNameEl.textContent = this.config.categoryNames[category] || category;
+
+    // Update position icon
+    const posIcons = { 'GK': '🧤', 'DEF': '🛡️', 'MID': '⚙️', 'ATT': '⚔️' };
+    const posIconEl = document.getElementById('teaserPositionIcon');
+    if (posIconEl) posIconEl.textContent = posIcons[category] || '⚽';
+
+    // Update base price
+    const basePriceEl = document.getElementById('teaserBasePrice');
+    if (basePriceEl) basePriceEl.textContent = this.formatCurrency(player.basePrice);
+
+    // Update stat hints (blurred preview of player abilities)
+    const attrs = player.attributes;
+    this.updateStatHint('hintPaceFill', attrs.pace);
+    this.updateStatHint('hintPowerFill', (attrs.physical + attrs.defense) / 2);
+    this.updateStatHint('hintSkillFill', (attrs.dribbling + attrs.passing) / 2);
 
     // Show teaser view
     this.showView('teaser');
     this.auctionPhase = 'teaser';
+  }
+
+  updateStatHint(elementId, value) {
+    const el = document.getElementById(elementId);
+    if (el) {
+      // Slightly randomize to keep it mysterious (±10)
+      const displayValue = Math.min(100, Math.max(20, value + (Math.random() * 20 - 10)));
+      el.style.width = `${displayValue}%`;
+    }
   }
 
   revealPlayer() {
@@ -540,26 +585,46 @@ updateBid(amount, history = [], managerId = null) {
     this.currentPlayer = null;
   }
 
-  showSoldAnimation(player, manager, price) {
-    // Update sold overlay content
-    this.elements.soldPlayerName.textContent = player.name;
-    this.elements.soldToTeam.textContent = `To ${manager.teamName}`;
-    this.elements.soldToTeam.style.color = manager.primaryColor;
-    this.elements.soldPrice.textContent = this.formatCurrency(price);
+showSoldAnimation(player, manager, price) {
+    // 1. Set Manager Details (Left side)
+    document.getElementById('transferManagerPhoto').src = manager.photo;
+    document.getElementById('transferManagerName').textContent = manager.name;
 
-    // Show overlay
-    this.elements.soldOverlay.classList.add('active');
+    // 2. Set Player Details (Right side)
+    document.getElementById('transferPlayerPhoto').src = player.photo;
+    document.getElementById('transferPlayerName').textContent = player.name;
 
-    // Fire confetti
+    // 3. Set Price (Center)
+    document.getElementById('transferPrice').textContent = this.formatCurrency(price);
+
+    // 4. Set The Headline: "PLAYER IS NOW A TEAM" (Bottom)
+    const teamNameElement = document.getElementById('transferTeamName');
+
+    // Construct the sentence with mixed colors
+    teamNameElement.innerHTML = `
+      <span style="color: #fff; opacity: 0.8;">${player.name.toUpperCase()} IS NOW A</span>
+      <span style="color: ${manager.primaryColor}; text-shadow: 0 0 20px ${manager.primaryColor}; margin-left: 15px;">${manager.teamName.toUpperCase()}</span>
+    `;
+
+    // Adjust font size slightly so the longer sentence fits on one line
+    teamNameElement.style.fontSize = "3.5rem";
+
+    // 5. Dynamic Background Color based on the winning team
+    document.getElementById('transferBg').style.background = `linear-gradient(135deg, ${manager.primaryColor}, ${manager.secondaryColor})`;
+
+    // 6. Set phase to sold and clear current player
+    this.auctionPhase = 'sold';
+    this.currentPlayer = null;
+    this.currentBid = 0;
+    this.bidHistory = [];
+
+    // 7. Switch View to the Transfer Screen
+    this.showView('transfer');
+
+    // 8. Fire Confetti
     if (this.config.animations.confettiEnabled) {
       confetti.celebrate();
     }
-
-    // Hide after delay
-    setTimeout(() => {
-      this.elements.soldOverlay.classList.remove('active');
-      confetti.stop();
-    }, 4000);
   }
 
   // ===============================
@@ -640,44 +705,100 @@ updateBid(amount, history = [], managerId = null) {
   // DASHBOARD VIEWS
   // ===============================
 
-  generateMasterView() {
+generateMasterView() {
     const container = this.elements.masterView;
+    if (!container) return;
+
+    // Position slots for 7-a-side: GK, DEF, DEF, MID, MID, ATT, ATT
+    const positionSlots = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
+
     container.innerHTML = this.managers.map(manager => {
       const managerPlayers = this.players.filter(p => p.soldTo === manager.id);
+      const totalSpent = this.config.totalBudget - manager.budget;
+
+      // Map players to positions
+      const slotPlayers = new Array(7).fill(null);
+      if (manager.players) {
+        manager.players.forEach(mp => {
+          if (mp.position !== null && mp.position >= 0 && mp.position < 7) {
+            const player = managerPlayers.find(p => p.id === mp.id);
+            if (player) slotPlayers[mp.position] = player;
+          }
+        });
+      }
+      // Fill unassigned players into empty slots
+      managerPlayers.forEach(player => {
+        if (!slotPlayers.includes(player)) {
+          const emptyIdx = slotPlayers.findIndex(p => p === null);
+          if (emptyIdx !== -1) slotPlayers[emptyIdx] = player;
+        }
+      });
 
       return `
-        <div class="master-team-card" style="border-left-color: ${manager.primaryColor}">
-          <div class="master-team-header">
-            <div class="master-team-info">
-              ${manager.logo ?
-                `<img src="${manager.logo}" class="master-team-logo" alt="${manager.teamName}" onerror="this.style.display='none'">` :
-                `<div class="master-team-logo" style="background: ${manager.primaryColor}; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">${manager.teamName.charAt(0)}</div>`
-              }
-              <div>
-                <div class="master-team-name" style="color: ${manager.primaryColor}">${manager.teamName}</div>
-                <div class="text-secondary">${manager.name}</div>
-              </div>
-            </div>
-            <div class="master-team-budget">${this.formatCurrency(manager.budget)}</div>
+        <div class="master-team-card" style="border-color: ${manager.primaryColor}40;">
+          <!-- Manager Header -->
+          <div class="master-team-header" style="border-bottom-color: ${manager.primaryColor};">
+             <img src="${manager.photo}" class="master-manager-photo"
+                  style="border-color: ${manager.secondaryColor};"
+                  onerror="this.src='${manager.logo}'">
+
+             <div class="master-team-info">
+                <div class="master-team-name" style="color: ${manager.primaryColor};">
+                   ${manager.teamName}
+                </div>
+                <div class="master-manager-name">${manager.name}</div>
+             </div>
+
+             <div class="master-budget-box">
+                <div class="master-budget-label">Budget</div>
+                <div class="master-budget-amount" style="color: ${manager.secondaryColor};">
+                   ${this.formatCurrency(manager.budget)}
+                </div>
+             </div>
           </div>
+
+          <!-- Players Grid -->
           <div class="master-team-players">
-            ${managerPlayers.map(player => `
-              <div class="master-player-slot">
-                ${player.photo ?
-                  `<img src="${player.photo}" class="master-player-photo" alt="${player.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                   <div class="master-player-photo" style="display: none; background: var(--bg-tertiary); align-items: center; justify-content: center;">${player.name.charAt(0)}</div>` :
-                  `<div class="master-player-photo" style="background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;">${player.name.charAt(0)}</div>`
-                }
-                <div class="master-player-name">${player.name}</div>
-                <div class="master-player-price">${this.formatCurrency(player.soldPrice)}</div>
-              </div>
-            `).join('')}
-            ${Array(Math.max(0, 6 - managerPlayers.length)).fill().map(() => `
-              <div class="master-player-slot empty">
-                <div class="master-player-photo" style="background: transparent; border: 2px dashed var(--text-muted);">?</div>
-                <div class="master-player-name">Empty</div>
-              </div>
-            `).join('')}
+            ${positionSlots.map((pos, idx) => {
+              const player = slotPlayers[idx];
+
+              if (player) {
+                const initials = player.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                return `
+                <div class="master-player-slot" style="border-left-color: ${manager.secondaryColor};">
+                  <div class="master-position-badge pos-${player.category}">${player.category}</div>
+
+                  <div class="master-player-visual">
+                    <img src="${player.photo}" class="master-player-img"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <div class="master-player-initials" style="display:none; background: ${manager.primaryColor};">
+                        ${initials}
+                    </div>
+                  </div>
+
+                  <div class="master-player-info">
+                    <div class="master-player-name">${player.name}</div>
+                  </div>
+
+                  <div class="master-player-price" style="color: ${manager.secondaryColor};">
+                     ${this.formatCurrency(player.soldPrice)}
+                  </div>
+                </div>
+              `} else {
+                return `
+                <div class="master-player-slot empty">
+                  <div class="master-position-badge pos-empty">${pos}</div>
+                  <div class="master-player-visual">
+                    <div class="master-player-initials" style="background: transparent; border-style: dashed;">
+                        ${idx + 1}
+                    </div>
+                  </div>
+                  <div class="master-player-info">
+                    <div class="master-player-name" style="color: rgba(255,255,255,0.3);">Empty Slot</div>
+                  </div>
+                </div>
+              `}
+            }).join('')}
           </div>
         </div>
       `;

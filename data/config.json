@@ -1,11 +1,12 @@
 {
-  "tournamentName": "Republic Cup 2026",
+  "tournamentName": "Scapia Offside 2026",
   "totalBudget": 100000000,
   "currency": "€",
   "currencySymbol": "€",
-  "bidIncrements": [100000, 500000, 1000000, 2000000, 5000000],
-  "defaultBidIncrement": 500000,
+  "bidIncrements": [1000000, 5000000, 10000000, 20000000],
+  "defaultBidIncrement": 1000000,
   "defaultBasePrice": 5000000,
+  "maxBidPerPlayer": 70000000,
   "basePrices": {
     "GK": 5000000,
     "DEF": 5000000,

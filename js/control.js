@@ -201,7 +201,12 @@ class AuctionControl {
           break;
         case 't':
           e.preventDefault();
-          this.changeView('transfer');
+          // Only show transfer if there's a completed sale in history
+          if (this.auctionHistory.length > 0) {
+            this.changeView('transfer');
+          } else {
+            console.log('No completed sales to show in transfer view');
+          }
           break;
         case 'b':
           e.preventDefault();
@@ -520,19 +525,27 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
   }
 
   selectManager(managerId) {
-    this.selectedManagerId = managerId;
-
-    // Validate: If current bid exceeds this manager's budget, cap it
+    // Validate: If current bid exceeds this manager's max spendable, cap it
     if (this.currentPlayer && managerId) {
       const manager = this.managers.find(m => m.id === managerId);
-      if (manager && this.currentBid > manager.budget) {
-        this.currentBid = manager.budget;
+      const maxSpendable = this.getMaxSpendableForManager(managerId);
+      const budgetInfo = this.getManagerBudgetInfo(managerId);
+
+      if (this.currentBid > maxSpendable) {
+        this.currentBid = maxSpendable;
         document.getElementById('bidInput').value = this.currentBid;
-        this.showValidationMessage(`Bid capped to ${manager.name}'s budget: ${this.formatCurrency(manager.budget)}`);
+        if (budgetInfo.playersNeeded > 1) {
+          this.showValidationMessage(
+            `Bid capped to ${this.formatCurrency(maxSpendable)} (reserving for ${budgetInfo.playersNeeded - 1} more players)`
+          );
+        } else {
+          this.showValidationMessage(`Bid capped to ${manager.name}'s max: ${this.formatCurrency(maxSpendable)}`);
+        }
         this.sendBidUpdate();
       }
     }
 
+    this.selectedManagerId = managerId;
     this.renderManagerButtons();
     this.updateQuickManagerButtons();
 
@@ -552,20 +565,27 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
     const manager = this.managers.find(m => m.id === managerId);
     if (!manager) return;
 
-    // Validate: Manager must have enough budget
     const basePrice = this.currentPlayer.basePrice;
-    if (manager.budget < basePrice) {
-      this.showValidationMessage(`${manager.name} cannot afford base price (${this.formatCurrency(basePrice)})`);
+    const maxSpendable = this.getMaxSpendableForManager(managerId);
+    const budgetInfo = this.getManagerBudgetInfo(managerId);
+
+    // Validate: Manager must have enough spendable budget for at least base price
+    if (maxSpendable < basePrice) {
+      this.showValidationMessage(
+        `${manager.name} cannot bid - max spendable is ${this.formatCurrency(maxSpendable)} (need to reserve for ${budgetInfo.playersNeeded - 1} more players)`
+      );
       return;
     }
 
     this.selectedManagerId = managerId;
 
-    // Validate: If current bid exceeds this manager's budget, cap it
-    if (this.currentBid > manager.budget) {
-      this.currentBid = manager.budget;
+    // Validate: If current bid exceeds manager's max spendable, cap it
+    if (this.currentBid > maxSpendable) {
+      this.currentBid = maxSpendable;
       document.getElementById('bidInput').value = this.currentBid;
-      this.showValidationMessage(`Bid capped to ${manager.name}'s budget: ${this.formatCurrency(manager.budget)}`);
+      this.showValidationMessage(
+        `Bid capped to ${this.formatCurrency(maxSpendable)} (reserving for ${budgetInfo.playersNeeded - 1} more players)`
+      );
     }
 
     this.renderManagerButtons();
@@ -624,17 +644,33 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
       this.currentBid = basePrice;
       this.showValidationMessage(`Cannot bid below base price (${this.formatCurrency(basePrice)})`);
     }
-    // Validate: Cannot exceed selected manager's budget
+    // Validate against selected manager's smart budget limit
     else if (this.selectedManagerId) {
       const manager = this.managers.find(m => m.id === this.selectedManagerId);
-      if (manager && newBid > manager.budget) {
-        this.currentBid = manager.budget;
-        this.showValidationMessage(`${manager.name} only has ${this.formatCurrency(manager.budget)} remaining`);
+      const maxSpendable = this.getMaxSpendableForManager(this.selectedManagerId);
+      const budgetInfo = this.getManagerBudgetInfo(this.selectedManagerId);
+
+      if (newBid > maxSpendable) {
+        this.currentBid = maxSpendable;
+        if (budgetInfo.playersNeeded > 1) {
+          this.showValidationMessage(
+            `${manager.name} max: ${this.formatCurrency(maxSpendable)} (reserving ${this.formatCurrency(budgetInfo.reservedForOthers)} for ${budgetInfo.playersNeeded - 1} more players)`
+          );
+        } else {
+          this.showValidationMessage(`${manager.name} max spendable: ${this.formatCurrency(maxSpendable)}`);
+        }
       } else {
         this.currentBid = newBid;
       }
     } else {
-      this.currentBid = newBid;
+      // No manager selected - just apply max bid per player limit
+      const maxBid = this.config.maxBidPerPlayer || 70000000;
+      if (newBid > maxBid) {
+        this.currentBid = maxBid;
+        this.showValidationMessage(`Max bid per player is ${this.formatCurrency(maxBid)}`);
+      } else {
+        this.currentBid = newBid;
+      }
     }
 
     document.getElementById('bidInput').value = this.currentBid;
@@ -670,12 +706,28 @@ const positions = ['GK', 'DEF', 'DEF', 'MID', 'MID', 'ATT', 'ATT'];
       this.showValidationMessage(`Cannot bid below base price (${this.formatCurrency(basePrice)})`);
     }
 
-    // Validate: Cannot exceed selected manager's budget
+    // Validate against selected manager's smart budget limit
     if (this.selectedManagerId) {
       const manager = this.managers.find(m => m.id === this.selectedManagerId);
-      if (manager && value > manager.budget) {
-        value = manager.budget;
-        this.showValidationMessage(`${manager.name} only has ${this.formatCurrency(manager.budget)} remaining`);
+      const maxSpendable = this.getMaxSpendableForManager(this.selectedManagerId);
+      const budgetInfo = this.getManagerBudgetInfo(this.selectedManagerId);
+
+      if (value > maxSpendable) {
+        value = maxSpendable;
+        if (budgetInfo.playersNeeded > 1) {
+          this.showValidationMessage(
+            `${manager.name} max: ${this.formatCurrency(maxSpendable)} (reserving ${this.formatCurrency(budgetInfo.reservedForOthers)} for ${budgetInfo.playersNeeded - 1} more players)`
+          );
+        } else {
+          this.showValidationMessage(`${manager.name} max spendable: ${this.formatCurrency(maxSpendable)}`);
+        }
+      }
+    } else {
+      // No manager selected - just apply max bid per player limit
+      const maxBid = this.config.maxBidPerPlayer || 70000000;
+      if (value > maxBid) {
+        value = maxBid;
+        this.showValidationMessage(`Max bid per player is ${this.formatCurrency(maxBid)}`);
       }
     }
 
@@ -711,10 +763,15 @@ sendBidUpdate() {
       timestamp: Date.now()
     });
 
+    // Get budget info for the selected manager
+    const budgetInfo = this.selectedManagerId ?
+      this.getManagerBudgetInfo(this.selectedManagerId) : null;
+
     auctionSync.send(SYNC_MESSAGES.UPDATE_BID, {
       amount: this.currentBid,
       history: this.bidHistory,
-      managerId: this.selectedManagerId // <--- CRITICAL ADDITION
+      managerId: this.selectedManagerId,
+      budgetInfo: budgetInfo // Include smart budget info
     });
   }
 
@@ -1069,6 +1126,67 @@ sendBidUpdate() {
   getDateString() {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  }
+
+  /**
+   * Calculate the maximum amount a manager can spend on current player
+   * while reserving enough budget for remaining players at base price
+   *
+   * Formula:
+   * - playersStillNeeded = playersPerTeam - playersOwned
+   * - playersToReserveFor = playersStillNeeded - 1 (excluding current player)
+   * - reservedBudget = playersToReserveFor × basePrice
+   * - maxSpendable = min(budget - reservedBudget, maxBidPerPlayer)
+   */
+  getMaxSpendableForManager(managerId) {
+    const manager = this.managers.find(m => m.id === managerId);
+    if (!manager) return 0;
+
+    const playersPerTeam = this.config.playersPerTeam || 7;
+    const basePrice = this.config.defaultBasePrice || 5000000;
+    const maxBidPerPlayer = this.config.maxBidPerPlayer || 70000000;
+
+    // Count players already owned by this manager
+    const playersOwned = manager.players ? manager.players.length : 0;
+
+    // Calculate how many more players they need (including current one)
+    const playersStillNeeded = playersPerTeam - playersOwned;
+
+    // If they have all players, they can't bid
+    if (playersStillNeeded <= 0) return 0;
+
+    // Reserve budget for remaining players AFTER this one
+    const playersToReserveFor = playersStillNeeded - 1;
+    const reservedBudget = playersToReserveFor * basePrice;
+
+    // Max they can spend = budget minus reserved, capped at maxBidPerPlayer
+    const maxFromBudget = manager.budget - reservedBudget;
+    const maxSpendable = Math.min(maxFromBudget, maxBidPerPlayer);
+
+    return Math.max(0, maxSpendable); // Never negative
+  }
+
+  /**
+   * Get budget info for a manager (for display purposes)
+   */
+  getManagerBudgetInfo(managerId) {
+    const manager = this.managers.find(m => m.id === managerId);
+    if (!manager) return null;
+
+    const playersPerTeam = this.config.playersPerTeam || 7;
+    const basePrice = this.config.defaultBasePrice || 5000000;
+    const playersOwned = manager.players ? manager.players.length : 0;
+    const playersStillNeeded = playersPerTeam - playersOwned;
+    const playersToReserveFor = Math.max(0, playersStillNeeded - 1);
+    const reservedBudget = playersToReserveFor * basePrice;
+
+    return {
+      totalBudget: manager.budget,
+      playersOwned: playersOwned,
+      playersNeeded: playersStillNeeded,
+      reservedForOthers: reservedBudget,
+      maxSpendable: this.getMaxSpendableForManager(managerId)
+    };
   }
 }
 

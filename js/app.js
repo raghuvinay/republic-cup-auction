@@ -167,6 +167,7 @@ class AuctionPresentation {
     this.generateMasterView();
     this.generateTeamViews();
     this.generateBudgetView();
+    this.generateManagersPanel();
     this.updateSoldUnsoldLists();
   }
 
@@ -203,6 +204,13 @@ class AuctionPresentation {
         case 's':
         case 'S':
           this.showView('soldlist');
+          break;
+        case 't':
+        case 'T':
+          // Only show transfer if a sale was completed
+          if (this.auctionPhase === 'sold' || this.players.some(p => p.status === 'sold')) {
+            this.showView('transfer');
+          }
           break;
         case 'Escape':
           this.showView('auction');
@@ -244,7 +252,7 @@ class AuctionPresentation {
     // Listen for bid updates
 // Listen for bid updates
     auctionSync.on(SYNC_MESSAGES.UPDATE_BID, (data) => {
-      this.updateBid(data.amount, data.history, data.managerId); // <--- We added managerId here
+      this.updateBid(data.amount, data.history, data.managerId, data.budgetInfo);
     });
     // Listen for sold
     auctionSync.on(SYNC_MESSAGES.PLAYER_SOLD, (data) => {
@@ -325,6 +333,8 @@ class AuctionPresentation {
         this.generateBudgetView();
       } else if (viewName === 'soldlist') {
         this.updateSoldUnsoldLists();
+      } else if (viewName === 'auction') {
+        this.generateManagersPanel();
       }
     }
   }
@@ -483,17 +493,70 @@ class AuctionPresentation {
     this.auctionPhase = 'bidding';
   }
 
-updateBid(amount, history = [], managerId = null) {
+updateBid(amount, history = [], managerId = null, budgetInfo = null) {
     this.currentBid = amount;
     if (history.length > 0) {
       this.bidHistory = history;
     }
     this.updateBidDisplay();
 
+    // Update managers panel with active bidder highlighted
+    this.generateManagersPanel(managerId);
+
     // TRIGGER ANIMATION
     if (managerId) {
         this.triggerBidAnimation(managerId, amount);
     }
+  }
+
+  updateBidderPurse(managerId, bidAmount, budgetInfo = null) {
+    const purseDisplay = document.getElementById('bidderPurseDisplay');
+
+    if (!managerId) {
+      purseDisplay.style.display = 'none';
+      return;
+    }
+
+    const manager = this.managers.find(m => m.id === managerId);
+    if (!manager) {
+      purseDisplay.style.display = 'none';
+      return;
+    }
+
+    // Show the purse display
+    purseDisplay.style.display = 'flex';
+
+    // Update bidder info
+    document.getElementById('bidderPhoto').src = manager.photo || '';
+    document.getElementById('bidderName').textContent = manager.name;
+    document.getElementById('bidderTeam').textContent = manager.teamName;
+
+    // Update squad status
+    const playersOwned = budgetInfo ? budgetInfo.playersOwned : (manager.players ? manager.players.length : 0);
+    const playersPerTeam = this.config.playersPerTeam || 7;
+    document.getElementById('bidderSquadStatus').textContent = `${playersOwned}/${playersPerTeam} Players`;
+
+    // Update purse amounts
+    const currentPurse = budgetInfo ? budgetInfo.totalBudget : manager.budget;
+    const maxSpendable = budgetInfo ? budgetInfo.maxSpendable : currentPurse;
+    const purseAfterBid = currentPurse - bidAmount;
+
+    document.getElementById('purseAmount').textContent = this.formatCurrency(currentPurse);
+    document.getElementById('purseMax').textContent = this.formatCurrency(maxSpendable);
+
+    const purseAfterEl = document.getElementById('purseAfter');
+    purseAfterEl.textContent = this.formatCurrency(purseAfterBid);
+
+    // Add warning class if purse will be low after bid or near max
+    const isNearMax = bidAmount >= maxSpendable * 0.9;
+    if (purseAfterBid < 10000000 || isNearMax) {
+      purseAfterEl.classList.add('low');
+    } else {
+      purseAfterEl.classList.remove('low');
+    }
+
+    // Update border color to match team
+    purseDisplay.style.borderColor = manager.primaryColor || 'var(--accent-secondary)';
   }
 
   triggerBidAnimation(managerId, amount) {
@@ -568,6 +631,7 @@ updateBid(amount, history = [], managerId = null) {
     this.generateMasterView();
     this.generateTeamViews();
     this.generateBudgetView();
+    this.generateManagersPanel();
     this.updateSoldUnsoldLists();
     this.updateHeader();
 
@@ -863,11 +927,15 @@ generateTeamViews() {
                 <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 250px; height: 80px; border: 3px solid rgba(255,255,255,0.4); border-bottom: none;"></div>
               </div>
 
-              <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 12px; border: 2px solid ${manager.primaryColor}; text-align: center; z-index: 20; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
-                 <div style="font-size: 0.8rem; text-transform: uppercase; color: #bbb; letter-spacing: 1px; margin-bottom: 5px;">Budget Remaining</div>
-                 <div style="font-family: var(--font-display); font-size: 2.5rem; color: ${manager.secondaryColor}; line-height: 1; text-shadow: 0 0 10px ${manager.secondaryColor}40;">
-                    ${this.formatCurrency(manager.budget)}
+              <!-- Top Right: Logo and Budget -->
+              <div style="position: absolute; top: 20px; right: 20px; display: flex; align-items: flex-start; gap: 15px; z-index: 20;">
+                 <div style="background: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 12px; border: 2px solid ${manager.primaryColor}; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                    <div style="font-size: 0.8rem; text-transform: uppercase; color: #bbb; letter-spacing: 1px; margin-bottom: 5px;">Budget Remaining</div>
+                    <div style="font-family: var(--font-display); font-size: 2.5rem; color: ${manager.secondaryColor}; line-height: 1; text-shadow: 0 0 10px ${manager.secondaryColor}40;">
+                       ${this.formatCurrency(manager.budget)}
+                    </div>
                  </div>
+                 <img src="assets/logo.png" alt="Tournament Logo" style="height: 80px; width: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));" onerror="this.style.display='none'">
               </div>
               
               ${this.generateFormationSlots(managerPlayers, manager)}
@@ -957,10 +1025,78 @@ generateTeamViews() {
           <div class="budget-bar">
             <div class="budget-bar-fill" style="width: ${percentage}%; background: linear-gradient(90deg, ${manager.primaryColor}, ${manager.secondaryColor})"></div>
           </div>
-          <div class="budget-player-count">${playerCount} / 6 Players</div>
+          <div class="budget-player-count">${playerCount} / 7 Players</div>
         </div>
       `;
     }).join('');
+  }
+
+  generateManagersPanel(activeBidderId = null) {
+    const container = document.getElementById('managersPanelList');
+    if (!container) return;
+
+    const playersPerTeam = this.config.playersPerTeam || 7;
+    const basePrice = this.config.defaultBasePrice || 5000000;
+
+    container.innerHTML = this.managers.map(manager => {
+      const playersOwned = manager.players ? manager.players.length : 0;
+      const playersNeeded = playersPerTeam - playersOwned;
+      const reservedForOthers = Math.max(0, playersNeeded - 1) * basePrice;
+      const maxSpendable = Math.min(
+        manager.budget - reservedForOthers,
+        this.config.maxBidPerPlayer || 70000000
+      );
+      const isActiveBidder = activeBidderId === manager.id;
+
+      // Determine stat colors
+      const purseClass = manager.budget < 20000000 ? 'danger' : (manager.budget < 40000000 ? 'warning' : '');
+      const maxClass = maxSpendable < 10000000 ? 'danger' : (maxSpendable < 20000000 ? 'warning' : '');
+
+      return `
+        <div class="manager-panel-card ${isActiveBidder ? 'active-bidder' : ''}"
+             style="border-left-color: ${manager.primaryColor};"
+             data-manager-id="${manager.id}">
+          <div class="manager-panel-header">
+            <img src="${manager.photo || ''}" class="manager-panel-photo" alt="${manager.name}" onerror="this.src='${manager.logo || ''}'">
+            <div class="manager-panel-info">
+              <div class="manager-panel-name">${manager.name}</div>
+              <div class="manager-panel-team" style="color: ${manager.primaryColor}">${manager.teamName}</div>
+            </div>
+            <span class="manager-panel-bidding-tag">BIDDING</span>
+          </div>
+          <div class="manager-panel-stats">
+            <div class="manager-stat">
+              <div class="manager-stat-label">Purse</div>
+              <div class="manager-stat-value ${purseClass}">${this.formatCurrency(manager.budget)}</div>
+            </div>
+            <div class="manager-stat">
+              <div class="manager-stat-label">Max Bid</div>
+              <div class="manager-stat-value ${maxClass}">${this.formatCurrency(Math.max(0, maxSpendable))}</div>
+            </div>
+            <div class="manager-stat">
+              <div class="manager-stat-label">Squad</div>
+              <div class="manager-stat-value">${playersOwned}/${playersPerTeam}</div>
+            </div>
+            <div class="manager-stat">
+              <div class="manager-stat-label">Need</div>
+              <div class="manager-stat-value">${playersNeeded}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  updateManagersPanelHighlight(activeBidderId) {
+    const cards = document.querySelectorAll('.manager-panel-card');
+    cards.forEach(card => {
+      const managerId = parseInt(card.dataset.managerId);
+      if (managerId === activeBidderId) {
+        card.classList.add('active-bidder');
+      } else {
+        card.classList.remove('active-bidder');
+      }
+    });
   }
 
   updateSoldUnsoldLists() {

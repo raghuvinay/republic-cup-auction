@@ -24,6 +24,7 @@
             <div class="header-stat-label">Current View</div>
             <div class="header-stat-value" id="currentViewLabel">Auction</div>
           </div>
+          <img src="assets/logo.png" alt="Tournament Logo" class="header-tournament-logo" onerror="this.style.display='none'">
         </div>
       </header>
 
@@ -31,6 +32,7 @@
       <main class="main-content">
         <!-- Welcome/Idle View -->
         <div class="view teaser-view" id="welcomeView">
+          <img src="assets/logo.png" alt="Tournament Logo" class="welcome-logo" onerror="this.style.display='none'">
           <div class="teaser-container">
             <div class="teaser-label">Welcome to</div>
             <h1 class="teaser-title" id="welcomeTitle">Republic Cup 2026</h1>
@@ -73,14 +75,15 @@
               </div>
             </div>
 
-            <!-- Center: The Big Question -->
+            <!-- Small Question Header -->
             <div class="teaser-question-section">
               <div class="teaser-eyebrow">NEXT UP FOR AUCTION</div>
-              <h1 class="teaser-headline">WHO IS THIS<br/>MYSTERY PLAYER?</h1>
+              <div class="teaser-headline">Who is this mystery player?</div>
             </div>
 
-            <!-- The Fun Fact - STAR OF THE SHOW -->
+            <!-- THE CLUE - MAIN ATTRACTION -->
             <div class="teaser-funfact-container">
+              <div class="funfact-label">THE CLUE</div>
               <div class="funfact-quote-mark">"</div>
               <p class="teaser-funfact-text" id="teaserFunFact">Loading the clue...</p>
               <div class="funfact-quote-mark end">"</div>
@@ -104,7 +107,7 @@
 
             <!-- Bottom: Call to action -->
             <div class="teaser-cta">
-              <div class="teaser-cta-text">CAN YOU GUESS WHO?</div>
+              <div class="teaser-cta-text">CAN YOU GUESS?</div>
               <div class="teaser-cta-hint">
                 <span class="pulse-dot"></span>
                 REVEAL INCOMING
@@ -192,47 +195,30 @@
           </div>
         </div>
 
-        <!-- Auction View (Bidding) -->
+        <!-- Auction View (Bidding) - 3 Column Layout -->
 
         <div class="view auction-view" id="auctionView">
+          <!-- Left: Player Card -->
           <div class="auction-player-section">
             <div class="player-card-container" style="transform: scale(0.85)">
               <div class="player-card flipped" id="auctionPlayerCard">
                 <div class="player-card-front"></div>
-
                 <div class="player-card-back">
                   <div class="card-header">
                     <div class="card-rating-box">
                       <div class="card-overall" id="auctionCardOverall">85</div>
-                      <div class="card-position" id="auctionCardPosition">
-                        ATT
-                      </div>
+                      <div class="card-position" id="auctionCardPosition">ATT</div>
                     </div>
                     <div class="card-logo">🏆</div>
                   </div>
-
                   <div class="card-photo-container">
-                    <img
-                      src=""
-                      alt=""
-                      class="card-photo"
-                      id="auctionCardPhoto"
-                    />
-                    <div
-                      class="card-photo-placeholder hidden"
-                      id="auctionCardPhotoPlaceholder"
-                    >
-                      ?
-                    </div>
+                    <img src="" alt="" class="card-photo" id="auctionCardPhoto" />
+                    <div class="card-photo-placeholder hidden" id="auctionCardPhotoPlaceholder">?</div>
                   </div>
-
                   <div class="card-info-section">
-                    <div class="card-name" id="auctionCardName">
-                      Player Name
-                    </div>
+                    <div class="card-name" id="auctionCardName">Player Name</div>
                     <div class="card-trait" id="auctionCardTrait">Star</div>
                   </div>
-
                   <div class="card-attributes">
                     <div class="card-attribute">
                       <span class="attr-val" id="auctionAttrPace">90</span>
@@ -259,14 +245,13 @@
                       <span class="attr-lbl">PHY</span>
                     </div>
                   </div>
-
-                  <div class="card-fun-fact" id="auctionCardFunFact">
-                    "Ready to play!"
-                  </div>
+                  <div class="card-fun-fact" id="auctionCardFunFact">"Ready to play!"</div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Center: Bid Info -->
           <div class="auction-bidding-section">
             <div class="current-bid-display">
               <div class="bid-label">Current Bid</div>
@@ -275,6 +260,14 @@
             <div class="bid-history" id="bidHistory">
               <div class="bid-history-title">Bid History</div>
               <div id="bidHistoryItems"></div>
+            </div>
+          </div>
+
+          <!-- Right: All Managers Panel -->
+          <div class="auction-managers-panel" id="auctionManagersPanel">
+            <div class="managers-panel-title">MANAGERS</div>
+            <div class="managers-panel-list" id="managersPanelList">
+              <!-- Dynamically generated -->
             </div>
           </div>
         </div>
